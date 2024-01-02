@@ -28,7 +28,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () => import('./pages/pages.component'),
-    canActivate: [ AuthGuard ],
+    canActivate: [AuthGuard],
     children: [
 
       // Home
@@ -69,7 +69,24 @@ export const routes: Routes = [
         path: 'usuarios/password/:id',
         title: 'Editar password',
         loadComponent: () => import('./pages/usuarios/editar-password/editar-password.component'),
-      }
+      },
+
+      // Dependencias
+
+      {
+        path: 'dependencias',
+        title: 'Dependencias',
+        loadComponent: () => import('./pages/dependencias/dependencias.component'),
+      },
+
+      // Tipos de orden de servicio
+
+      {
+        path: 'tiposOrdenServicio',
+        title: 'Tipos de ordenes',
+        loadComponent: () => import('./pages/tipos_orden_servicio/tipos_orden_servicio.component'),
+      },
+
 
     ]
   },
