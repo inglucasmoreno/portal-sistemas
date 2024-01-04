@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { AlertService } from "../../services/alert.service";
 import { DataService } from "../../services/data.service";
-import { TiposOrdenServicioService } from "../../services/tiposOrdenServicio.service";
+import { TiposOrdenServicioService } from "../../services/tipos-orden-servicio.service";
 import { FormsModule } from "@angular/forms";
 import { FechaPipe } from "../../pipes/fecha.pipe";
 import { ModalComponent } from "../../components/modal/modal.component";
@@ -27,7 +27,7 @@ import { FiltroTiposOrdenesServicioPipe } from "../../pipes/filtro-tipos-ordenes
         TarjetaListaComponent,
         FiltroTiposOrdenesServicioPipe
     ],
-    templateUrl: './tipos_orden_servicio.component.html',
+    templateUrl: './tipos-ordenes-servicio.component.html',
 })
 export default class TiposOrdenServicioComponent {
 

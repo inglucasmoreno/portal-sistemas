@@ -84,7 +84,7 @@ export const routes: Routes = [
       {
         path: 'tiposOrdenServicio',
         title: 'Tipos de ordenes',
-        loadComponent: () => import('./pages/tipos_orden_servicio/tipos_orden_servicio.component'),
+        loadComponent: () => import('./pages/tipos-ordenes-servicio/tipos-ordenes-servicio.component'),
       },
 
 
