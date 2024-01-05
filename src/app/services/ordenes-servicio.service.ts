@@ -3,7 +3,7 @@ import { environments } from '../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const urlApi = environments.base_url + '/ordenes_servicio';
+const urlApi = environments.base_url + '/ordenes-servicio';
 
 @Injectable({
   providedIn: 'root'

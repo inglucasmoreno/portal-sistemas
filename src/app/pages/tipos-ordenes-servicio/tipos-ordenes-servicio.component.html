@@ -12,17 +12,17 @@
       </div>
       <div class="px-4 pt-2 max-h-96 overflow-y-auto text-sm">
         <p class="font-semibold"> <span class="text-red-500"> * </span> Descripcion </p>
-        <input [(ngModel)]="descripcion" class="input-generico w-full mt-2" placeholder="Ej. Servicio tecnico" type="text">
-        <div *ngIf="tipoSeleccionado && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
+        <input [(ngModel)]="descripcion" class="input-generico w-full my-2" placeholder="Ej. Servicio tecnico" type="text">
+        <div *ngIf="tipoSeleccionado && estadoFormulario === 'editar'" class="xl:flex items-center mt-1">
           <div class="xl:w-1/2">
             <p class="font-semibold text-sm"> Fecha de alta </p>
-            <div class="border text-sm mt-2 border-gray-400 rounded p-2 bg-gray-100">
+            <div class="border text-sm mt-2 border-gray-400 rounded p-2 bg-white">
               {{ tipoSeleccionado.createdAt | fecha }}
             </div>
           </div>
           <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
             <p class="font-semibold text-sm"> Usuario creador </p>
-            <div class="border text-sm capitalize mt-2 border-gray-400 rounded p-2 bg-gray-100">
+            <div class="border text-sm capitalize mt-2 border-gray-400 rounded p-2 bg-white">
               {{ tipoSeleccionado.creatorUser.apellido.toLowerCase() }} {{
               tipoSeleccionado.creatorUser.nombre.toLowerCase() }}
             </div>
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="px-2 pb-2">
-        <button *ngIf="estadoFormulario == 'crear'" (click)="nuevoTipo()" class="boton-crear w-full mt-4"> Crear tipo
+        <button *ngIf="estadoFormulario == 'crear'" (click)="nuevoTipo()" class="boton-crear w-full mt-2"> Crear tipo
         </button>
         <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarTipo()" class="boton-editar w-full mt-4">
           Actualizar tipo </button>
@@ -235,4 +235,3 @@
       </div>
     </app-tarjeta-lista>
   </div>
-  

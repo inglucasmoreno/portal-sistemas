@@ -87,6 +87,13 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/tipos-ordenes-servicio/tipos-ordenes-servicio.component'),
       },
 
+      // Ordenes de servicio
+
+      {
+        path: 'ordenesServicio',
+        title: 'Ordenes de servicio',
+        loadComponent: () => import('./pages/ordenes-servicio/ordenes-servicio.component'),
+      },
 
     ]
   },

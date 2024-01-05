@@ -32,6 +32,10 @@ export default class NuevoUsuarioComponent implements OnInit {
     return this.usuarioForm.get('nombre');
   }
 
+  get telefono() {
+    return this.usuarioForm.get('telefono');
+  }
+
   get dni() {
     return this.usuarioForm.get('dni');
   }
@@ -73,6 +77,7 @@ export default class NuevoUsuarioComponent implements OnInit {
       usuario: ['', [Validators.required, Validators.minLength(5)]],
       apellido: ['', Validators.required],
       nombre: ['', Validators.required],
+      telefono: ['', Validators.required],
       dni: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]],

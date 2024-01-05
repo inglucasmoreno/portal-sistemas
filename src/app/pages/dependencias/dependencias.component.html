@@ -12,27 +12,27 @@
       </div>
       <div class="px-4 pt-2 max-h-96 overflow-y-auto text-sm">
         <p class="font-semibold"> <span class="text-red-500"> * </span> Nombre </p>
-        <input [(ngModel)]="nombre" class="input-generico w-full mt-2" placeholder="Ej. Contaduria" type="text">
-        <div *ngIf="dependenciaSeleccionada && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
+        <input [(ngModel)]="nombre" class="input-generico w-full my-2" placeholder="Ej. Contaduria" type="text">
+        <div *ngIf="dependenciaSeleccionada && estadoFormulario === 'editar'" class="xl:flex items-center mt-1">
           <div class="xl:w-1/2">
             <p class="font-semibold text-sm"> Fecha de alta </p>
-            <div class="border text-sm mt-2 border-gray-400 rounded p-2 bg-gray-100">
+            <div class="border text-sm mt-2 border-gray-400 rounded p-2 bg-white">
               {{ dependenciaSeleccionada.createdAt | fecha }}
             </div>
           </div>
           <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
             <p class="font-semibold text-sm"> Usuario creador </p>
-            <div class="border text-sm capitalize mt-2 border-gray-400 rounded p-2 bg-gray-100">
+            <div class="border text-sm capitalize mt-2 border-gray-400 rounded p-2 bg-white">
               {{ dependenciaSeleccionada.creatorUser.apellido.toLowerCase() }} {{
               dependenciaSeleccionada.creatorUser.nombre.toLowerCase() }}
             </div>
           </div>
         </div>
       </div>
-      <div class="px-2 pb-2">
-        <button *ngIf="estadoFormulario == 'crear'" (click)="nuevaDependencia()" class="boton-crear w-full mt-4"> Crear dependencia
+      <div class="px-2 pb-2 mt-2">
+        <button *ngIf="estadoFormulario == 'crear'" (click)="nuevaDependencia()" class="boton-crear w-full"> Crear dependencia
         </button>
-        <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarDependencia()" class="boton-editar w-full mt-4">
+        <button *ngIf="estadoFormulario == 'editar'" (click)="actualizarDependencia()" class="boton-editar w-full mt-2">
           Actualizar dependencia </button>
       </div>
     </div>
@@ -235,4 +235,3 @@
       </div>
     </app-tarjeta-lista>
   </div>
-  
