@@ -22,7 +22,7 @@ export class TiposOrdenServicioService {
     })
   }
 
-  listarTipos({ direccion = 'asc', columna = 'nombre' }): Observable<any> {
+  listarTipos({ direccion = 'asc', columna = 'descripcion' }): Observable<any> {
     return this.http.get(urlApi, {
       params: {
         direccion: String(direccion),
