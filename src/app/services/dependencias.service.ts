@@ -22,11 +22,12 @@ export class DependenciasService {
     })
   }
 
-  listarDependencias({ direccion = 'asc', columna = 'nombre' }): Observable<any> {
+  listarDependencias({ direccion = 'asc', columna = 'nombre', activo = '' }): Observable<any> {
     return this.http.get(urlApi, {
       params: {
         direccion: String(direccion),
-        columna
+        columna,
+        activo
       },
       headers: this.getToken
     })

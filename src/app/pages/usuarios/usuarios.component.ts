@@ -62,7 +62,6 @@ export default class UsuariosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.authService.usuario);
     this.dataService.ubicacionActual = 'Dashboard - Usuarios'
     this.alertService.loading();
     this.listarUsuarios();

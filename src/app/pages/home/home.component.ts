@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import gsap from 'gsap';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -11,7 +12,8 @@ import gsap from 'gsap';
 export default class HomeComponent implements OnInit {
 
   constructor(
-    private dataService: DataService
+    private dataService: DataService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {

@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { PastillaEstadoComponent } from '../../components/pastilla-estado/pastilla-estado.component';
 import { TarjetaListaComponent } from '../../components/tarjeta-lista/tarjeta-lista.component';
 import { FiltroOrdenesServicioPipe } from '../../pipes/filtro-ordenes-servicio.pipe';
+import { FechaHoraPipe } from '../../pipes/fecha-hora.pipe';
 
 @Component({
   standalone: true,
@@ -20,6 +21,7 @@ import { FiltroOrdenesServicioPipe } from '../../pipes/filtro-ordenes-servicio.p
   imports: [
     CommonModule,
     FormsModule,
+    FechaHoraPipe,
     FechaPipe,
     ModalComponent,
     NgxPaginationModule,
@@ -34,6 +36,7 @@ export default class OrdenesServicioComponent implements OnInit {
 
   // Modal
   public showModalOrden = false;
+  public showModalDetalles = false;
 
   // Estado formulario
   public estadoFormulario = 'crear';
@@ -83,13 +86,18 @@ export default class OrdenesServicioComponent implements OnInit {
 
   // Abrir modal
   abrirModal(estado: string, orden: any = null): void {
-    this.reiniciarFormulario();
     this.idOrden = '';
 
     if (estado === 'editar') this.getOrden(orden);
     else this.showModalOrden = true;
 
     this.estadoFormulario = estado;
+  }
+
+  // Abrir Modal - Detalles de orden
+  abrirDetalles(orden: any): void {
+    this.showModalDetalles = true;
+    this.ordenSeleccionada = orden;
   }
 
   // Traer datos de orden
@@ -175,10 +183,7 @@ export default class OrdenesServicioComponent implements OnInit {
       });
   }
 
-  // Reiniciando formulario
-  reiniciarFormulario(): void {
 
-  }
 
   // Filtrar Activo/Inactivo
   filtrarActivos(activo: any): void {

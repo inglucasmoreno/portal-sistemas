@@ -78,7 +78,8 @@
             </div>
             <div class="bg-white my-2 flex">
               <select class="input-generico w-full" formControlName="role">
-                <option value="USER_ROLE"> Usuario estandar </option>
+                <option value="USER_ROLE"> Estandar </option>
+                <option value="TECHNICAL_ROLE"> Técnico </option>
                 <option value="ADMIN_ROLE"> Administrador </option>
               </select>
             </div>
@@ -143,6 +144,10 @@
         <div *ngIf="usuarioForm.value.role === 'USER_ROLE'"
           class="bg-orange-100 flex items-center justify-center w-32 h-32 rounded-full shadow border border-orange-300">
           <p class="text-6xl font-semibold text-orange-500"> E </p>
+        </div>
+        <div *ngIf="usuarioForm.value.role === 'TECHNICAL_ROLE'"
+          class="bg-purple-100 flex items-center justify-center w-32 h-32 rounded-full shadow border border-purple-300">
+          <p class="text-6xl font-semibold text-purple-500"> T </p>
         </div>
         <div class="ml-4 mt-2">
           <div class="mt-1">

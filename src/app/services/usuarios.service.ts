@@ -24,11 +24,12 @@ export class UsuariosService {
   }
 
   // Listar usuarios
-  listarUsuarios(direccion: number = 1, columna: string = 'apellido'): Observable<any> {
+  listarUsuarios(direccion: number = 1, columna: string = 'apellido', activo = ''): Observable<any> {
     return this.http.get(urlApi, {
       params: {
         direccion: String(direccion),
-        columna
+        columna,
+        activo
       },
       headers: {
         'Authorization': localStorage.getItem('token')

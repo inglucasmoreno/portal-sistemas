@@ -22,11 +22,12 @@ export class TiposOrdenServicioService {
     })
   }
 
-  listarTipos({ direccion = 'asc', columna = 'descripcion' }): Observable<any> {
+  listarTipos({ direccion = 'asc', columna = 'descripcion', activo = '' }): Observable<any> {
     return this.http.get(urlApi, {
       params: {
         direccion: String(direccion),
-        columna
+        columna,
+        activo
       },
       headers: this.getToken
     })
@@ -43,5 +44,5 @@ export class TiposOrdenServicioService {
       headers: this.getToken
     })
   }
-  
+
 }

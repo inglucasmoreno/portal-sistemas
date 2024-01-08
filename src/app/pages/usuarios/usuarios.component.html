@@ -216,7 +216,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr [ngClass]="{'bg-indigo-50':authService.usuario.userId === usuario.id}" class="animate__animated animate__fadeIn"
+              <tr [ngClass]="{'bg-indigo-50':authService.usuario.userId === usuario.id}"
+                class="animate__animated animate__fadeIn"
                 *ngFor="let usuario of usuarios | filtroUsuarios:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                   <div class="text-gray-900 whitespace-no-wrap">
@@ -229,6 +230,11 @@
                       class="bg-blue-100 flex items-center font-semibold text-blue-900 text-2xl justify-center w-10 h-10 rounded-full shadow border border-blue-300"
                       src="assets/img/usuarios/usuario_estandar.png" alt="Avatar">
                       A
+                    </div>
+                    <div *ngIf="usuario.role == 'TECHNICAL_ROLE'"
+                      class="bg-purple-100 flex items-center font-semibold text-purple-900 text-2xl justify-center w-10 h-10 rounded-full shadow border border-purple-300"
+                      src="assets/img/usuarios/usuario_estandar.png" alt="Avatar">
+                      T
                     </div>
                   </div>
                 </td>
@@ -258,21 +264,24 @@
                 </td>
                 <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                   <p class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                    <button [routerLink]="['/dashboard/usuarios/editar', usuario.id]" title="Editar usuario" class="boton-editar ml-2">
+                    <button [routerLink]="['/dashboard/usuarios/editar', usuario.id]" title="Editar usuario"
+                      class="boton-editar ml-2">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                       </svg>
                     </button>
-                    <button [routerLink]="['/dashboard/usuarios/password', usuario.id]" title="Actualizar contraseña" class="p-2 rounded shadow focus:outline-none bg-fuchsia-600 hover:opacity-90 text-white ml-2">
-                      <svg xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    <button [routerLink]="['/dashboard/usuarios/password', usuario.id]" title="Actualizar contraseña"
+                      class="p-2 rounded shadow focus:outline-none bg-fuchsia-600 hover:opacity-90 text-white ml-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                           d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                       </svg>
                     </button>
-                    <button [routerLink]="['/dashboard/usuarios/permisos', usuario.id]" title="Permisos de usuario" class="p-2 rounded shadow bg-blue-600 hover:opacity-90 text-white ml-2">
+                    <button [routerLink]="['/dashboard/usuarios/permisos', usuario.id]" title="Permisos de usuario"
+                      class="p-2 rounded shadow bg-blue-600 hover:opacity-90 text-white ml-2">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"

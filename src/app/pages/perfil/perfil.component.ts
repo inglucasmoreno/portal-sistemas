@@ -34,7 +34,7 @@ export default class PerfilComponent implements OnInit {
   }
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private dataService: DataService,
     private fb: FormBuilder,
     private usuariosService: UsuariosService,
@@ -45,6 +45,7 @@ export default class PerfilComponent implements OnInit {
   public passwordForm: FormGroup;
 
   ngOnInit(): void {
+
     gsap.from('.gsap-contenido', { y: 100, opacity: 0, duration: .2 });
     this.dataService.ubicacionActual = "Dashboard - Perfil";
     this.getUsuario();
@@ -55,6 +56,7 @@ export default class PerfilComponent implements OnInit {
       password_nuevo: ['', [Validators.required, Validators.minLength(4)]],
       password_nuevo_repetir: ['', [Validators.required, Validators.minLength(4)]]
     });
+
   }
 
   // Obtener datos de usuario

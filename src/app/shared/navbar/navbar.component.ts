@@ -3,11 +3,15 @@ import { AuthService } from '../../services/auth.service';
 import { DataService } from '../../services/data.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { LimitarStringPipe } from '../../pipes/limitar-string.pipe';
 
 @Component({
   standalone: true,
   selector: 'app-navbar',
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+  ],
   templateUrl: './navbar.component.html',
   styleUrls: []
 })
@@ -26,6 +30,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.usuarioLogin = this.authService.usuario;
+    // console.log(this.usuarioLogin);
   }
 
   mostrarOcultarSeccion(seccion = 'configuraciones'): void {

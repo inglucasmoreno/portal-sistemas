@@ -28,7 +28,7 @@ export default class NuevaOrdenServicioComponent implements OnInit {
     usuarioId: "",
     estadoOrden: "PENDIENTE",
     observacionSolicitud: "",
-    creatorUser: this.authService.usuario.userId
+    creatorUserId: this.authService.usuario.userId
   }
 
   public dependencias: any[] = [];
@@ -40,26 +40,26 @@ export default class NuevaOrdenServicioComponent implements OnInit {
     private dataService: DataService,
     private alertService: AlertService,
     private dependenciasService: DependenciasService,
-    private tiposOrdenServicioService: TiposOrdenServicioService, 
+    private tiposOrdenServicioService: TiposOrdenServicioService,
     private ordenesServicioService: OrdenesServicioService,
     private usuariosService: UsuariosService
   ) { }
 
   ngOnInit() {
-    this.dataService.ubicacionActual = "Solicitud de asistencia";
+    this.dataService.ubicacionActual = "Dashboard - Solicitud de asistencia";
     gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
     this.inicializacion();
   }
 
   inicializacion(): void {
     this.alertService.loading();
-    this.dependenciasService.listarDependencias({}).subscribe({
+    this.dependenciasService.listarDependencias({ activo: 'true' }).subscribe({
       next: ({ dependencias }) => {
         this.dependencias = dependencias;
-        this.usuariosService.listarUsuarios().subscribe({
+        this.usuariosService.listarUsuarios(1,'apellido','true').subscribe({
           next: ({ usuarios }) => {
             this.usuarios = usuarios;
-            this.tiposOrdenServicioService.listarTipos({}).subscribe({
+            this.tiposOrdenServicioService.listarTipos({activo: 'true'}).subscribe({
               next: ({ tipos }) => {
                 this.tiposOrdenes = tipos;
                 this.alertService.close();
@@ -97,8 +97,6 @@ export default class NuevaOrdenServicioComponent implements OnInit {
       tipoOrdenServicioId: Number(this.ordenServicioForm.tipoOrdenServicioId)
     }
 
-    console.log(data);
-
     this.ordenesServicioService.nuevaOrden(data).subscribe({
       next: () => {
         this.alertService.success("Orden de servicio generada");
@@ -108,11 +106,11 @@ export default class NuevaOrdenServicioComponent implements OnInit {
           usuarioId: "",
           estadoOrden: "PENDIENTE",
           observacionSolicitud: "",
-          creatorUser: this.authService.usuario.userId
+          creatorUserId: this.authService.usuario.userId
         }
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     });
-    
+
   }
 
 }

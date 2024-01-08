@@ -15,8 +15,21 @@
           class="bg-orange-100 mr-auto ml-auto flex items-center justify-center w-24 h-24 rounded-full shadow border border-orange-300">
           <p class="text-4xl font-semibold text-orange-500"> E </p>
         </div>
+        <div *ngIf="usuarioLogin.role === 'TECHNICAL_ROLE'"
+          class="bg-purple-100 mr-auto ml-auto flex items-center justify-center w-24 h-24 rounded-full shadow border border-purple-300">
+          <p class="text-4xl font-semibold text-purple-500"> T </p>
+        </div>
+
+        <p [ngClass]="{'text-purple-700':usuarioLogin.role === 'TECHNICAL_ROLE'}" class="mt-1 text-sm text-blue-800"> {{
+          usuarioLogin.role === 'TECHNICAL_ROLE' ? 'Usuario técnico' : '' }} </p>
+
         <p [ngClass]="{'text-orange-700':usuarioLogin.role === 'USER_ROLE'}" class="mt-1 text-sm text-blue-800"> {{
-          usuarioLogin.role === 'ADMIN_ROLE' ? 'Usuario administrador' : 'Usuario estandar' }} </p>
+          usuarioLogin.role === 'USER_ROLE' ? 'Usuario' : '' }} </p>
+
+        <p [ngClass]="{'text-blue-700':usuarioLogin.role === 'ADMIN_ROLE'}" class="mt-1 text-sm text-blue-800"> {{
+          usuarioLogin.role === 'ADMIN_ROLE' ? 'Administrador' : '' }} </p>
+
+
       </div>
 
       <!-- Datos de usuario -->
@@ -38,6 +51,10 @@
           <p class="font-semibold text-xl"> Fecha de ingreso </p>
           <p class="text-gray-500"> {{ usuarioLogin.createdAt | fecha }} </p>
         </div>
+        <div *ngIf="authService.usuario?.dependencia?.nombre" class="p-2 text-center mt-1">
+          <p class="font-semibold text-xl"> Dependencia </p>
+          <p class="text-gray-500 mt-2"> {{ authService.usuario?.dependencia?.nombre }} </p>
+        </div>
       </div>
 
     </div>
@@ -58,8 +75,7 @@
       <div class="mt-2">
         <p class="font-semibold ml-1"> Nueva contraseña </p>
         <input formControlName="password_nuevo" autocomplete="false" type="password"
-          placeholder="Ingresar nueva contraseña"
-          class="input-generico w-full mt-1">
+          placeholder="Ingresar nueva contraseña" class="input-generico w-full mt-1">
         <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['required']" class="text-error mt-1"> La
           contraseña es obligatoria </p>
         <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['minlength']" class="text-error mt-1"> Debe tener
@@ -68,11 +84,12 @@
       <div class="mt-2 mb-2">
         <p class="font-semibold ml-1"> Repetir contraseña </p>
         <input formControlName="password_nuevo_repetir" autocomplete="false" type="password"
-          placeholder="Repite la nueva contraseña"
-          class="input-generico w-full mt-1">
-        <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['required']" class="text-error mt-1"> La
+          placeholder="Repite la nueva contraseña" class="input-generico w-full mt-1">
+        <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['required']"
+          class="text-error mt-1"> La
           contraseña es obligatoria </p>
-        <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['minlength']" class="text-error mt-1"> Debe tener
+        <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['minlength']"
+          class="text-error mt-1"> Debe tener
           como minimo {{ password_nuevo_repetir?.errors?.['minlength'].requiredLength }} caracteres </p>
       </div>
       <button (click)="actualizarPassword()" class="boton-editar my-2 w-full">

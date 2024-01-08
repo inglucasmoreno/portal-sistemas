@@ -67,14 +67,14 @@ export default class EditarUsuarioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     // Animaciones y Datos de ruta
     gsap.from('.gsap-contenido', { y: 100, opacity: 0, duration: .2 });
     this.dataService.ubicacionActual = 'Dashboard - Editando usuario';
 
     // Formulario reactivo
     this.usuarioForm = this.fb.group({
-      usuario: ['', [Validators.required, Validators.minLength(5)]],
+      usuario: ['', [Validators.required, Validators.minLength(4)]],
       apellido: ['', Validators.required],
       nombre: ['', Validators.required],
       dni: ['', Validators.required],
@@ -121,7 +121,7 @@ export default class EditarUsuarioComponent implements OnInit {
     if(this.usuarioForm.valid){
       let data: any = this.usuarioForm.value;
       this.alertService.loading();
-  
+
       this.usuariosService.actualizarUsuario(this.id, data).subscribe({
         next: () => {
           this.alertService.close();

@@ -14,7 +14,7 @@
         <option value=""> Tipo de solicitud </option>
         <option *ngFor="let tipo of tiposOrdenes" [value]="tipo.id"> {{ tipo.descripcion }} </option>
       </select>
-      <textarea placeholder="Observaciones no obligatorias" class="w-full input-generico mt-4"></textarea>
+      <textarea [(ngModel)]="ordenServicioForm.observacionSolicitud" placeholder="Observaciones no obligatorias" class="w-full input-generico mt-4"></textarea>
       <button (click)="generarOrdenServicio()" class="boton-crear w-full mt-4">
         Generar solicitud
       </button>

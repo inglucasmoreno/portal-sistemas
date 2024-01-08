@@ -1,5 +1,35 @@
+
+<!-- Modal: Detalles de orden -->
+<app-modal [showModal]="showModalDetalles">
+  <div>
+    <div class="flex items-center justify-between bg-gray-800 rounded-t p-2">
+      <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Detalles de orden </h1>
+      <svg (click)="showModalDetalles = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="cursor-pointer feather feather-x text-white mr-2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </div>
+    <div class="p-2 text-sm">
+      <p class="mt-2"> <span class="font-semibold"> Fecha y Hora: </span> {{ ordenSeleccionada?.createdAt | fechaHora }} </p>
+      <p class="mt-2"> <span class="font-semibold"> Solicitante: </span> {{ ordenSeleccionada?.usuario.apellido }} {{ ordenSeleccionada?.usuario.nombre }} </p>
+      <p class="mt-2"> <span class="font-semibold"> Dependencia: </span> {{ ordenSeleccionada?.dependencia.nombre }} </p>
+      <p class="mt-2"> <span class="font-semibold"> Comentarios: </span> {{ ordenSeleccionada?.observacionSolicitud }} </p>
+    </div>
+    <div class="flex items-center px-2 py-1">
+      <button class="boton-eliminar w-1/2">
+        Dar de baja
+      </button>
+      <button class="boton-crear w-1/2 ml-2">
+        Aceptar
+      </button>
+    </div>
+  </div>
+</app-modal>
+
 <!-- Modal: Crear / Editar orden -->
-<app-modal [showModal]="showModalOrden">
+<!-- <app-modal [showModal]="showModalOrden">
   <div (keyup.enter)="estadoFormulario === 'crear' ? nuevaOrden() : actualizarOrden()">
     <div class="flex items-center justify-between bg-gray-800 rounded-t p-2">
       <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Orden de servicio </h1>
@@ -52,7 +82,7 @@
       </button>
     </div>
   </div>
-</app-modal>
+</app-modal> -->
 
 <!-- Listado de ordenes -->
 <div class="md:max-w-7xl mx-auto">
@@ -67,7 +97,7 @@
             <p> Total de ordenes: {{ ordenes.length }} </p>
           </div>
           <div>
-            <button title="Nueva orden" (click)="abrirModal('crear')" class="boton-nuevo-header">
+            <button title="Nueva orden" routerLink="/dashboard/ordenServicio/nueva" class="boton-nuevo-header">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -120,35 +150,11 @@
               <thead>
                 <tr class="border">
                   <th
-                    class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                    <div (click)="ordenarPorColumna('nombre')"
-                      class="cursor-pointer flex items-center focus:outline-none">
-                      <span> Nombre </span>
-                      <span class="ml-2 text-gray-600">
-                        <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 'asc'" width="15" height="15"
-                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round" class="feather feather-chevron-down">
-                          <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                        <svg *ngIf="ordenar.columna == 'nombre' && ordenar.direccion == 'desc'" width="15" height="15"
-                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                          stroke-linejoin="round" class="feather feather-chevron-up">
-                          <polyline points="18 15 12 9 6 15"></polyline>
-                        </svg>
-                        <svg *ngIf="ordenar.columna != 'nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="feather feather-minus">
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                      </span>
-                    </div>
-                  </th>
-                  <th
                     class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
                     <div (click)="ordenarPorColumna('createdAt')"
                       class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                       <span>
-                        Fecha de creación
+                        Fecha de solicitud
                       </span>
                       <span class="ml-2">
                         <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 'asc'" width="15" height="15"
@@ -162,6 +168,54 @@
                           <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
                         <svg *ngIf="ordenar.columna != 'createdAt'" width="15" height="15" viewBox="0 0 24 24"
+                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round" class="feather feather-minus">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                      </span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                    <div (click)="ordenarPorColumna('usuario')"
+                      class="cursor-pointer flex items-center focus:outline-none">
+                      <span> Usuario </span>
+                      <span class="ml-2 text-gray-600">
+                        <svg *ngIf="ordenar.columna == 'usuario' && ordenar.direccion == 'asc'" width="15" height="15"
+                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round" class="feather feather-chevron-down">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        <svg *ngIf="ordenar.columna == 'usuario' && ordenar.direccion == 'desc'" width="15" height="15"
+                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                          stroke-linejoin="round" class="feather feather-chevron-up">
+                          <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                        <svg *ngIf="ordenar.columna != 'usuario'" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="feather feather-minus">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                      </span>
+                    </div>
+                  </th>
+                  <th
+                    class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                    <div (click)="ordenarPorColumna('dependencia')"
+                      class="cursor-pointer flex items-center focus:outline-none">
+                      <span> Dependencia </span>
+                      <span class="ml-2 text-gray-600">
+                        <svg *ngIf="ordenar.columna == 'dependencia' && ordenar.direccion == 'asc'" width="15"
+                          height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        <svg *ngIf="ordenar.columna == 'dependencia' && ordenar.direccion == 'desc'" width="15"
+                          height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up">
+                          <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                        <svg *ngIf="ordenar.columna != 'dependencia'" width="15" height="15" viewBox="0 0 24 24"
                           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-minus">
                           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -206,25 +260,38 @@
                 cantidadItems, currentPage: paginaActual}; track orden.id){
                 <tr class="animate__animated animate__fadeIn">
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                    <p class="text-gray-900 w-max whitespace-no-wrap">
-                      {{ orden.nombre }}
-                    </p>
-                  </td>
-                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
                     <p class="text-gray-900 whitespace-no-wrap">
-                      {{ orden.createdAt | fecha }}
+                      {{ orden.createdAt | fechaHora }}
                     </p>
                   </td>
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                    <app-pastilla-estado [activo]=orden.activo (click)="actualizarEstado(orden)"></app-pastilla-estado>
+                    <p class="text-gray-900 w-max whitespace-no-wrap">
+                      {{ orden.usuario.apellido }} {{ orden.usuario.nombre }}
+                    </p>
+                  </td>
+                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                    <p class="text-gray-900 w-max whitespace-no-wrap">
+                      {{ orden.dependencia.nombre }}
+                    </p>
+                  </td>
+                  <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                    <p class="text-gray-900 w-max whitespace-no-wrap">
+                      {{ orden.estadoOrden }}
+                    </p>
                   </td>
                   <td class="px-5 py-2 border-b border-gray-200 text-xs text-center">
                     <span class="flex items-center justify-center text-gray-900 whitespace-no-wrap">
-                      <button (click)="abrirModal('editar', orden)" title="Editar orden" class="boton-editar ml-2">
+                      <!-- <button (click)="abrirModal('editar', orden)" title="Editar orden" class="boton-editar ml-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                           stroke="currentColor" class="w-5 h-5">
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                        </svg>
+                      </button> -->
+                      <button (click)="abrirDetalles(orden)" title="Detalles de orden" class="p-2 bg-secondaryColor text-white rounded hover:opacity-90 ml-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
                       </button>
                     </span>
