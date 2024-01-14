@@ -6,6 +6,8 @@ import { AlertService } from '../../../services/alert.service';
 import { DataService } from '../../../services/data.service';
 import gsap from 'gsap';
 import { CommonModule } from '@angular/common';
+import { DependenciasService } from '../../../services/dependencias.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -59,9 +61,13 @@ export default class NuevoUsuarioComponent implements OnInit {
   // Modelo reactivo
   public usuarioForm: FormGroup;
 
+  public dependencias: any[] = [];
+
   constructor(private fb: FormBuilder,
     private router: Router,
     private usuariosService: UsuariosService,
+    private authService: AuthService,
+    private dependenciasService: DependenciasService,
     private alertService: AlertService,
     private dataService: DataService
   ) { }
@@ -80,9 +86,18 @@ export default class NuevoUsuarioComponent implements OnInit {
       telefono: ['', Validators.required],
       dni: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      dependencia: [''],
       password: ['', [Validators.required, Validators.minLength(4)]],
       repetir: ['', [Validators.required, Validators.minLength(4)]],
       role: ['ADMIN_ROLE', Validators.required],
+    });
+
+    this.alertService.loading();
+    this.dependenciasService.listarDependencias({}).subscribe({
+      next: ({dependencias}) => {
+        this.dependencias = dependencias;
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
     });
 
   }
@@ -90,7 +105,7 @@ export default class NuevoUsuarioComponent implements OnInit {
   // Crear nuevo usuario
   nuevoUsuario(): void {
 
-    const { usuario, role, password, repetir } = this.usuarioForm.value;
+    const { password, repetir } = this.usuarioForm.value;
 
     // Se verifica si las contraseñas coinciden
     if (password !== repetir) {
@@ -99,16 +114,14 @@ export default class NuevoUsuarioComponent implements OnInit {
     }
 
     // Generar una constante data con usuarioForm sin el campo repetir
-    const data = this.usuarioForm.value;
+    const data = {...this.usuarioForm.value, creatorUserId: this.authService.usuario.userId};
     delete data.repetir;
-
 
     if (this.usuarioForm.valid) {
       this.alertService.loading();  // Comienzo de loading
-      this.usuariosService.nuevoUsuario(this.usuarioForm.value).subscribe({
+      this.usuariosService.nuevoUsuario(data).subscribe({
         next: () => {
-          if (role === 'ADMIN_ROLE') this.router.navigateByUrl('dashboard/usuarios');
-          else this.router.navigateByUrl('dashboard/usuarios/permisos/' + usuario.id);
+          this.router.navigateByUrl('dashboard/usuarios');
           this.alertService.close();  // Finaliza el loading
         }, error: ({ error }) => {
           this.alertService.errorApi(error.message);
