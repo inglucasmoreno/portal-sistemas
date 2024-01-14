@@ -121,6 +121,7 @@ export default class EditarUsuarioComponent implements OnInit {
           nombre,
           dni,
           telefono,
+          dependencia: this.usuario?.UsuariosDependencias[0]?.dependencia?.id ? this.usuario?.UsuariosDependencias[0]?.dependencia?.id : "",
           email,
           role,
           activo: String(activo)
@@ -136,7 +137,17 @@ export default class EditarUsuarioComponent implements OnInit {
   // Editar usuario
   editarUsuario(): void | boolean {
     if(this.usuarioForm.valid){
+    
+      // Se verifica si un usuario estandar tiene seleccionada una dependencia
+      if (this.usuarioForm.value.role === 'USER_ROLE' && this.usuarioForm.value.dependencia === '') {
+        this.alertService.info('Debe seleccionar una dependencia');
+        return;
+      }
+    
+      this.usuarioForm.value.dependencia = this.usuarioForm.value.dependencia === '' ? '' : Number(this.usuarioForm.value.dependencia);
+
       let data: any = this.usuarioForm.value;
+
       this.alertService.loading();
 
       this.usuariosService.actualizarUsuario(this.id, data).subscribe({
@@ -145,6 +156,7 @@ export default class EditarUsuarioComponent implements OnInit {
           this.router.navigateByUrl('dashboard/usuarios');
         }, error: ({ error }) => this.alertService.errorApi(error.message)
       });
+    
     }else{
       this.usuarioForm.markAllAsTouched();
     }

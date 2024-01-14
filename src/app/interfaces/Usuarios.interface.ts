@@ -13,6 +13,8 @@ export interface Usuarios {
 
   telefono: string;
 
+  UsuariosDependencias: any;
+
   password: string;
 
   email: string;

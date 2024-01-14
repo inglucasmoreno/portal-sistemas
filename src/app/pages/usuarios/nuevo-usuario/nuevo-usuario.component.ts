@@ -113,6 +113,12 @@ export default class NuevoUsuarioComponent implements OnInit {
       return;
     }
 
+    // Se verifica si un usuario estandar tiene seleccionada una dependencia
+    if (this.usuarioForm.value.role === 'USER_ROLE' && this.usuarioForm.value.dependencia === '') {
+      this.alertService.info('Debe seleccionar una dependencia');
+      return;
+    }
+
     // Generar una constante data con usuarioForm sin el campo repetir
     const data = {...this.usuarioForm.value, creatorUserId: this.authService.usuario.userId};
     delete data.repetir;
