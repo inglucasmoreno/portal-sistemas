@@ -1,19 +1,20 @@
 # Informacion inicial
 - `Node v20.0.9`
 - `NPM v10.1.0`
+- `PNPM v8.14.1`
 - `Angular 17.0.1`
 
 # Ejecucion de proyecto
 
 ```bash
 # Instalacion de librerias
-$ npm install
+$ pnpm install
 
 # Iniciar proyecto
-$ npm start
+$ pnpm start
 
 # Generar archivo de produccion
-$ npm run build
+$ pnpm run build
 ```
 
 ## Desarrollado por
