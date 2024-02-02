@@ -39,7 +39,7 @@ export default class OrdenesServicioComponent implements OnInit {
   public showModalDetalles = false;
 
   // Estado formulario
-  public estadoFormulario = 'crear';
+  public estadoFormulario = 'detalles';
 
   // Orden de servicio
   public idOrden: string = '';
@@ -85,19 +85,20 @@ export default class OrdenesServicioComponent implements OnInit {
   }
 
   // Abrir modal
-  abrirModal(estado: string, orden: any = null): void {
-    this.idOrden = '';
-
-    if (estado === 'editar') this.getOrden(orden);
-    else this.showModalOrden = true;
+  abrirModal(estado: string = "detalles", orden: any = null): void {
 
     this.estadoFormulario = estado;
-  }
 
-  // Abrir Modal - Detalles de orden
-  abrirDetalles(orden: any): void {
-    this.showModalDetalles = true;
-    this.ordenSeleccionada = orden;
+    if(estado === "detalles"){
+      this.idOrden = '';
+      this.ordenSeleccionada = orden;
+      this.showModalDetalles = true;
+    }else if(estado === "rechazada"){
+    
+    }else if(estado === "aceptada"){
+    
+    }
+
   }
 
   // Traer datos de orden

@@ -1,88 +1,87 @@
-
 <!-- Modal: Detalles de orden -->
 <app-modal [showModal]="showModalDetalles">
   <div>
     <div class="flex items-center justify-between bg-gray-800 rounded-t p-2">
       <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Detalles de orden </h1>
-      <svg (click)="showModalDetalles = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      <svg (click)="showModalDetalles = false" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
         class="cursor-pointer feather feather-x text-white mr-2">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
     </div>
-    <div class="p-2 text-sm">
-      <p class="mt-2"> <span class="font-semibold"> Fecha y Hora: </span> {{ ordenSeleccionada?.createdAt | fechaHora }} </p>
-      <p class="mt-2"> <span class="font-semibold"> Solicitante: </span> {{ ordenSeleccionada?.usuario.apellido }} {{ ordenSeleccionada?.usuario.nombre }} </p>
-      <p class="mt-2"> <span class="font-semibold"> Dependencia: </span> {{ ordenSeleccionada?.dependencia.nombre }} </p>
-      <p class="mt-2"> <span class="font-semibold"> Comentarios: </span> {{ ordenSeleccionada?.observacionSolicitud }} </p>
-    </div>
-    <div class="flex items-center px-2 py-1">
-      <button class="boton-eliminar w-1/2">
-        Dar de baja
-      </button>
-      <button class="boton-crear w-1/2 ml-2">
-        Aceptar
-      </button>
-    </div>
+
+    <!-- Cuerpo del modal -->
+    
+    @if(estadoFormulario === "detalles"){
+      <div class="p-2 text-sm">
+        <p class="mt-2"> <span class="font-semibold"> Fecha y Hora: </span> {{ ordenSeleccionada?.createdAt | fechaHora }}
+        </p>
+        <div class="p-2 mt-3 mb-1 border border-gray-400 border-x-0 flex items-center">
+          <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" class="w-20" xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+            <path style="fill:#303C42;"
+              d="M256,0C114.844,0,0,114.844,0,256s114.844,256,256,256s256-114.844,256-256S397.156,0,256,0z" />
+            <path style="fill:#E6E6E6;"
+              d="M256,21.333c129.396,0,234.667,105.271,234.667,234.667c0,51.508-16.878,99.038-45.121,137.781 c-2.467-1.605-4.905-3.069-7.379-4.344C395.417,367.49,329.104,341.333,256,341.333S116.583,367.49,73.823,389.448 c-2.467,1.27-4.902,2.73-7.368,4.333C38.212,355.036,21.333,307.508,21.333,256C21.333,126.604,126.604,21.333,256,21.333z" />
+            <path style="fill:#1E88E5;"
+              d="M256,490.667c-70.161,0-133.056-31.108-176.095-80.073c1.227-0.743,2.464-1.551,3.678-2.177 c40.656-20.875,103.573-45.75,172.417-45.75s131.76,24.875,172.406,45.74c1.22,0.63,2.46,1.439,3.69,2.186 C389.056,459.557,326.161,490.667,256,490.667z" />
+            <circle style="fill:#303C42;" cx="256" cy="192" r="128" />
+            <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-33.5392" y1="631.086" x2="-28.0542"
+              y2="625.6" gradientTransform="matrix(21.3333 0 0 -21.3333 996.3334 13791.667)">
+              <stop offset="0" style="stop-color:#000000;stop-opacity:0.1" />
+              <stop offset="1" style="stop-color:#000000;stop-opacity:0" />
+            </linearGradient>
+            <path style="fill:url(#SVGID_1_);"
+              d="M352.73,469.59c30.467-13.922,57.497-34.118,79.366-58.997c-1.23-0.747-2.47-1.556-3.69-2.186 c-40.646-20.865-103.563-45.74-172.406-45.74c-3.296,0-6.501,0.314-9.768,0.424L352.73,469.59z" />
+            <circle style="fill:#1E88E5;" cx="256" cy="192" r="106.667" />
+            <path style="opacity:0.1;enable-background:new ;"
+              d="M313.184,102.263c4.176,11.41,6.816,23.565,6.816,36.404 c0,58.815-47.85,106.667-106.667,106.667c-21.077,0-40.621-6.339-57.184-16.93c14.956,40.861,53.872,70.263,99.85,70.263 c58.816,0,106.667-47.852,106.667-106.667C362.667,154.26,342.841,121.229,313.184,102.263z" />
+            <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="-45.5784" y1="639.555" x2="-23.8278"
+              y2="629.4138" gradientTransform="matrix(21.3333 0 0 -21.3333 996.3334 13791.667)">
+              <stop offset="0" style="stop-color:#FFFFFF;stop-opacity:0.2" />
+              <stop offset="1" style="stop-color:#FFFFFF;stop-opacity:0" />
+            </linearGradient>
+            <path style="fill:url(#SVGID_2_);"
+              d="M256,0C114.844,0,0,114.844,0,256s114.844,256,256,256s256-114.844,256-256S397.156,0,256,0z" />
+          </svg>
+          <div class="ml-4">
+            <p class="font-semibold"> {{ ordenSeleccionada?.usuario.apellido }} {{ ordenSeleccionada?.usuario.nombre }} </p>
+            <p class="text-xs text-gray-800 mt-1"> {{ ordenSeleccionada?.dependencia.nombre }} </p>
+            <p class="text-xs text-gray-800 mt-1"> Tel. {{ ordenSeleccionada?.usuario.telefono }} </p>
+          </div>
+        </div>
+        <p class="p-2 mt-2"> <span class="font-semibold"> Comentarios: </span> {{ ordenSeleccionada?.observacionSolicitud }}
+        </p>
+      </div>
+      <div class="flex items-center px-2 py-1">
+        <button (click)="abrirModal('rechazada')" class="boton-eliminar w-1/2">
+          Rechazar
+        </button>
+        <button class="boton-crear w-1/2 ml-2">
+          Aceptar
+        </button>
+      </div>
+    }@else if(estadoFormulario === "rechazada"){
+      <div class="p-3">
+        <div>
+          <p class="font-semibold"> <span class="text-red-700"> * </span> Motivo del rechazo </p>
+          <input type="text" class="border border-gray-400 p-2 mt-2 w-full rounded shadow" placeholder="Motivo obligatorio">
+          <div class="flex items-center mt-3">
+            <button (click)="abrirModal('detalles', ordenSeleccionada)" class="boton-eliminar w-1/2">
+              Regresar
+            </button>
+            <button class="boton-crear w-1/2 ml-2">
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+    }@else if(estadoFormulario === "aceptada"){
+
+    }
   </div>
 </app-modal>
-
-<!-- Modal: Crear / Editar orden -->
-<!-- <app-modal [showModal]="showModalOrden">
-  <div (keyup.enter)="estadoFormulario === 'crear' ? nuevaOrden() : actualizarOrden()">
-    <div class="flex items-center justify-between bg-gray-800 rounded-t p-2">
-      <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Orden de servicio </h1>
-      <svg (click)="showModalOrden = false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="cursor-pointer feather feather-x text-white mr-2">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </div>
-    <div class="px-4 pt-2 max-h-96 overflow-y-auto bg-gray-100 text-sm">
-
-      <div class="bg-white border border-gray-400 p-2">
-        <p> <span class="font-semibold"> Fecha de orden: </span> 01/01/2014 </p>
-        <p class="mt-1"> <span class="font-semibold"> Usuario: </span> MORENO LUCAS OMAR </p>
-        <p class="mt-1"> <span class="font-semibold"> Dependencia: </span> COMPRAS </p>
-      </div>
-
-      <div class="mt-2 mb-2">
-        <p class="font-semibold"> <span class="text-red-500"> * </span> Tipo de orden </p>
-        <select class="w-full input-generico mt-2">
-          <option value=""> Seleccionar tipo de orden </option>
-          <option value=""> SERVICIO IMPRESORA </option>
-        </select>
-      </div>
-
-      <div class="mt-2 mb-2">
-        <p class="font-semibold"> Observación </p>
-        <input placeholder="Ej. No podemos imprimir en otra PC" type="text" class="input-generico mt-2 w-full">
-      </div>
-
-      <div *ngIf="ordenSeleccionada && estadoFormulario === 'editar'" class="xl:flex items-center mt-4">
-        <div class="xl:w-1/2">
-          <p class="font-semibold text-sm"> Fecha de alta </p>
-          <div class="border text-sm mt-2 border-gray-400 rounded p-2 bg-white">
-            {{ ordenSeleccionada.createdAt | fecha }}
-          </div>
-        </div>
-        <div class="xl:ml-4 xl:w-1/2 mt-4 xl:mt-0">
-          <p class="font-semibold text-sm"> Usuario creador </p>
-          <div class="border text-sm bg-white capitalize mt-2 border-gray-400 rounded p-2">
-            {{ ordenSeleccionada.creatorUser.apellido.toLowerCase() }} {{
-            ordenSeleccionada.creatorUser.nombre.toLowerCase() }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="px-2 pb-2 bg-gray-100">
-      <button *ngIf="estadoFormulario == 'crear'" (click)="nuevaOrden()" class="boton-crear w-full mt-2"> Crear orden
-      </button>
-    </div>
-  </div>
-</app-modal> -->
 
 <!-- Listado de ordenes -->
 <div class="md:max-w-7xl mx-auto">
@@ -288,10 +287,14 @@
                             d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                         </svg>
                       </button> -->
-                      <button (click)="abrirDetalles(orden)" title="Detalles de orden" class="p-2 bg-secondaryColor text-white rounded hover:opacity-90 ml-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      <button (click)="abrirModal('detalles', orden)" title="Detalles de orden"
+                        class="p-2 bg-secondaryColor text-white rounded hover:opacity-90 ml-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                          stroke="currentColor" class="w-5 h-5">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
                       </button>
                     </span>

@@ -36,7 +36,7 @@ export default class NuevaOrdenServicioComponent implements OnInit {
   public tiposOrdenes: any[] = [];
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private dataService: DataService,
     private alertService: AlertService,
     private dependenciasService: DependenciasService,
@@ -49,6 +49,7 @@ export default class NuevaOrdenServicioComponent implements OnInit {
     this.dataService.ubicacionActual = "Dashboard - Solicitud de asistencia";
     gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
     this.inicializacion();
+    console.log(this.authService.usuario)
   }
 
   inicializacion(): void {
@@ -73,28 +74,38 @@ export default class NuevaOrdenServicioComponent implements OnInit {
 
   generarOrdenServicio(): void {
 
+    const { 
+      usuarioId, 
+      dependenciaId, 
+      tipoOrdenServicioId,
+      observacionSolicitud, 
+      estadoOrden
+    } = this.ordenServicioForm;
+
     // Verificaciones
 
-    if(this.ordenServicioForm.usuarioId == "") {
+    if(usuarioId == "" && this.authService.usuario.role !== "USER_ROLE") {
       this.alertService.info("Debe seleccionar un usuario");
       return;
     }
 
-    if(this.ordenServicioForm.dependenciaId == "") {
+    if(dependenciaId == "" && this.authService.usuario.role !== "USER_ROLE") {
       this.alertService.info("Debe seleccionar una dependencia");
       return;
     }
 
-    if(this.ordenServicioForm.tipoOrdenServicioId == "") {
+    if(tipoOrdenServicioId == "") {
       this.alertService.info("Debe seleccionar un tipo de solicitud");
       return;
-    }
+    } 
 
     const data = {
-      ...this.ordenServicioForm,
-      usuarioId: Number(this.ordenServicioForm.usuarioId),
-      dependenciaId: Number(this.ordenServicioForm.dependenciaId),
-      tipoOrdenServicioId: Number(this.ordenServicioForm.tipoOrdenServicioId)
+      usuarioId: this.authService.usuario.role === "USER_ROLE" ? this.authService.usuario.userId : Number(this.ordenServicioForm.usuarioId),
+      dependenciaId: this.authService.usuario.role === "USER_ROLE" ? this.authService.usuario.dependencia.id : Number(this.ordenServicioForm.dependenciaId),
+      tipoOrdenServicioId: Number(this.ordenServicioForm.tipoOrdenServicioId),
+      creatorUserId: this.authService.usuario.userId,
+      estadoOrden,
+      observacionSolicitud
     }
 
     this.ordenesServicioService.nuevaOrden(data).subscribe({
