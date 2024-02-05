@@ -8,6 +8,7 @@ import { DataService } from '../../../services/data.service';
 import gsap from 'gsap';
 import { CommonModule } from '@angular/common';
 import { DependenciasService } from '../../../services/dependencias.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -70,7 +71,8 @@ export default class EditarUsuarioComponent implements OnInit {
     private dependenciasService: DependenciasService,
     private usuariosService: UsuariosService,
     private alertService: AlertService,
-    private dataService: DataService
+    private dataService: DataService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -136,17 +138,21 @@ export default class EditarUsuarioComponent implements OnInit {
 
   // Editar usuario
   editarUsuario(): void | boolean {
+
     if(this.usuarioForm.valid){
-    
+
       // Se verifica si un usuario estandar tiene seleccionada una dependencia
       if (this.usuarioForm.value.role === 'USER_ROLE' && this.usuarioForm.value.dependencia === '') {
         this.alertService.info('Debe seleccionar una dependencia');
         return;
       }
-    
+
       this.usuarioForm.value.dependencia = this.usuarioForm.value.dependencia === '' ? '' : Number(this.usuarioForm.value.dependencia);
 
-      let data: any = this.usuarioForm.value;
+      let data: any = {
+        ...this.usuarioForm.value,
+        creatorUserId: this.authService.usuario.userId
+      };
 
       this.alertService.loading();
 
@@ -156,7 +162,7 @@ export default class EditarUsuarioComponent implements OnInit {
           this.router.navigateByUrl('dashboard/usuarios');
         }, error: ({ error }) => this.alertService.errorApi(error.message)
       });
-    
+
     }else{
       this.usuarioForm.markAllAsTouched();
     }
