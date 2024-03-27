@@ -1,3 +1,24 @@
+<app-modal [showModal]="showDependencias">
+  <div>
+    <div class="bg-gray-800 p-2 flex rounded-t items-center justify-between text-white">
+      <h1> Asignando dependencia </h1>
+      <button (click)="showDependencias = false" class="hover:text-secondaryColor">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="bg-white p-2 text-sm">
+      <select class="input-generico w-full p-2">
+        <option value=""> Seleccionar dependencia </option>
+        <option *ngFor="let dependencia of dependencias" [value]="dependencia"> {{ dependencia.nombre }} </option>
+      </select>
+      <button class="bg-secondaryColor p-2 rounded w-full text-white shadow mt-3 hover:opacity-90"> Asignar dependencia </button>
+    </div>
+  </div>
+</app-modal>
+
 <div class="lg:flex p-4 gsap-contenido max-w-5xl mx-auto">
 
   <div class="w-full lg:w-1/2 bg-white mr-2 shadow rounded border border-gray-400">
@@ -105,7 +126,8 @@
             <div class="bg-white p-1">
               <select formControlName="dependencia" class="input-generico p-2 w-full">
                 <option value=""> Seleccionar dependencia </option>
-                <option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }} </option>
+                <option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }}
+                </option>
               </select>
             </div>
           </div>
@@ -192,6 +214,33 @@
         </div>
       </div>
     </div>
+
+    <!-- Dependencias -->
+    <div class="mt-2 text-sm">
+      <div class="bg-gray-100 p-2 border border-gray-400 flex items-center justify-between">
+        <h1 class="bg-gray-50 font-semibold"> Listado de dependencias </h1>
+        <button (click)="abrirDependencias()" title="Agregar dependencia"
+          class="p-2 bg-white hover:text-se rounded border border-gray-400 hover:text-secondaryColor">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    @for(dependencia of dependenciasUsuario; track dependencia.id ){
+    <div class="border border-gray-400 p-2">
+      {{ dependencia.nombre }}
+    </div>
+    }@empty {
+    <div class="italic text-sm bg-gray-100 border border-gray-300 text-center p-2 mt-2 text-gray-600"> 
+      <p>
+        No se encontraron dependencias asociadas al usuario 
+      </p>
+      <button (click)="abrirDependencias()" class="boton-crear mt-2"> Asignar dependecia </button>
+    </div>
+    }
 
   </div>
 </div>

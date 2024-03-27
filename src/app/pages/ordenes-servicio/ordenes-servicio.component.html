@@ -1,6 +1,7 @@
 <!-- Modal: Detalles de orden -->
 <app-modal [showModal]="showModalDetalles">
   <div>
+    
     <div class="flex items-center justify-between bg-gray-800 rounded-t p-2">
       <h1 class=" text-white px-2 py-1 rounded-t text-lg"> Detalles de orden </h1>
       <svg (click)="showModalDetalles = false" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -15,18 +16,26 @@
 
     @if(estadoFormulario === "detalles"){
     <div class="p-2 text-sm">
-      <div class="flex items-center mt-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-        </svg>
-        <p class="ml-1"> <span class="font-semibold"> Fecha y Hora: </span> {{ ordenSeleccionada?.createdAt | fechaHora
-          }}
+      <div class="flex items-center justify-between mt-2">
+        <div class="flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+          </svg>
+          <p class="ml-1"> <span class="font-semibold"> Fecha y Hora: </span> {{ ordenSeleccionada?.createdAt | fechaHora
+            }}
+          </p>
+        </div>
+        <p class="mr-2">
+          <span [ngClass]="{'bg-yellow-500':ordenSeleccionada?.estadoOrden === 'Pendiente', 'bg-red-500':ordenSeleccionada?.estadoOrden === 'Rechazada', 'bg-green-700':ordenSeleccionada?.estadoOrden === 'Completada'}"
+            class="text-white w-max whitespace-no-wrap p-1 rounded">
+            {{ ordenSeleccionada?.estadoOrden }}
+          </span>
         </p>
       </div>
       <div class="p-2 mt-3 mb-1 border border-gray-400 border-x-0 flex items-center">
-        <img src="assets/svg/usuario.svg" class="w-20">
+        <img src="assets/svg/usuario.svg" class="w-14">
         <div class="ml-4">
           <p class="font-semibold"> {{ ordenSeleccionada?.usuario.apellido }} {{ ordenSeleccionada?.usuario.nombre }}
           </p>
@@ -35,21 +44,29 @@
         </div>
       </div>
       <div *ngIf="ordenSeleccionada?.observacionSolicitud?.trim() !== ''" class="flex p-2 items-center">
-        <img src="assets/svg/comentarios.svg" class="w-20">
+        <img src="assets/svg/comentarios.svg" class="w-14">
         <div class="ml-4">
           <p class="font-semibold"> {{ ordenSeleccionada?.tipoOrdenServicio.descripcion }}</p>
-          <p class="text-xs"> {{ ordenSeleccionada?.observacionSolicitud }} </p>
+          <p class="text-xs mt-1"> {{ ordenSeleccionada?.observacionSolicitud }} </p>
         </div>
       </div>
       <div *ngIf="ordenSeleccionada?.observacionSolicitud?.trim() === ''" class="flex p-2 items-center">
-        <img src="assets/svg/comentarios-vacios.svg" class="w-20">
+        <img src="assets/svg/comentarios-vacios.svg" class="w-14">
         <div class="ml-4">
           <p class="font-semibold"> {{ ordenSeleccionada?.tipoOrdenServicio.descripcion }} </p>
           <p class="text-xs italic"> No se encotraron comentarios </p>
         </div>
       </div>
+      <div *ngIf="ordenSeleccionada?.estadoOrden === 'Rechazada'" class="flex p-2 items-center border-t border-gray-400">
+        <img src="assets/svg/motivo-rechazo.svg" class="w-14">
+        <div class="ml-4">
+          <p class="font-semibold"> RECHAZO DE SOLICITUD </p>
+          <p class="text-xd mt-1"> {{ ordenSeleccionada?.fechaCierre | fechaHora }} </p>
+          <p class="text-xs mt-1"> {{ ordenSeleccionada?.motivoRechazo }} </p>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center px-2 py-1">
+    <div *ngIf="ordenSeleccionada?.estadoOrden === 'Pendiente'" class="flex items-center px-2 py-1">
       <button (click)="abrirModal('rechazada')" class="boton-eliminar w-1/2">
         Rechazar
       </button>
@@ -58,23 +75,23 @@
       </button>
     </div>
     }@else if(estadoFormulario === "rechazada"){
-    <div class="p-3">
+    <div class="px-3 py-2">
       <div>
         <p class="font-semibold"> <span class="text-red-700"> * </span> Motivo del rechazo </p>
-        <input type="text" class="border border-gray-400 p-2 mt-2 w-full rounded shadow"
+        <input (keyup.enter)="rechazarOrden()" [(ngModel)]="motivoRechazo" type="text" class="input-generico w-full mt-2 text-sm"
           placeholder="Motivo obligatorio">
         <div class="flex items-center mt-3">
-          <button (click)="abrirModal('detalles', ordenSeleccionada)" class="boton-eliminar w-1/2">
+          <button (click)="abrirModal('detalles', ordenSeleccionada)" class="bg-gray-500 border border-gray-400 rounded p-2 text-sm text-white hover:opacity-90 w-1/2">
             Regresar
           </button>
-          <button class="boton-crear w-1/2 ml-2">
-            Aceptar
+          <button (click)="rechazarOrden()" class="boton-eliminar w-1/2 ml-2">
+            Rechazar
           </button>
         </div>
       </div>
     </div>
     }@else if(estadoFormulario === "aceptada"){
-
+      <h1> Seleccionar tecnico </h1>
     }
   </div>
 </app-modal>
@@ -196,21 +213,21 @@
                   </th>
                   <th
                     class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                    <div (click)="ordenarPorColumna('dependencia')"
+                    <div (click)="ordenarPorColumna('tipoOrdenServicio')"
                       class="cursor-pointer flex items-center focus:outline-none">
-                      <span> Dependencia </span>
+                      <span> Tipo de solicitud </span>
                       <span class="ml-2 text-gray-600">
-                        <svg *ngIf="ordenar.columna == 'dependencia' && ordenar.direccion == 'asc'" width="15"
+                        <svg *ngIf="ordenar.columna == 'tipoOrdenServicio' && ordenar.direccion == 'asc'" width="15"
                           height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna == 'dependencia' && ordenar.direccion == 'desc'" width="15"
+                        <svg *ngIf="ordenar.columna == 'tipoOrdenServicio' && ordenar.direccion == 'desc'" width="15"
                           height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up">
                           <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna != 'dependencia'" width="15" height="15" viewBox="0 0 24 24"
+                        <svg *ngIf="ordenar.columna != 'tipoOrdenServicio'" width="15" height="15" viewBox="0 0 24 24"
                           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-minus">
                           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -266,11 +283,11 @@
                   </td>
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                     <p class="text-gray-900 w-max whitespace-no-wrap">
-                      {{ orden.dependencia.nombre }}
+                      {{ orden.tipoOrdenServicio.descripcion }}
                     </p>
                   </td>
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                    <p class="text-gray-900 w-max whitespace-no-wrap">
+                    <p [ngClass]="{'bg-yellow-500':orden.estadoOrden === 'Pendiente', 'bg-red-500':orden.estadoOrden === 'Rechazada', 'bg-green-700':orden.estadoOrden === 'Completada'}" class="text-white w-max whitespace-no-wrap p-1 rounded">
                       {{ orden.estadoOrden }}
                     </p>
                   </td>

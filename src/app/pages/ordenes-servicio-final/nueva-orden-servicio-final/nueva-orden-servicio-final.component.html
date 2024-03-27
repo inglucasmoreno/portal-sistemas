@@ -1,0 +1,33 @@
+
+<div class="w-1/2 mx-auto p-2 mt-4">
+
+  <!-- Encabezado -->
+  <h1 class="text-xl text-center font-semibold"> Solicitud de asistencia </h1>
+
+  <!-- Cuerpo de la solicitud -->
+  <div class="text-sm">
+    <div class="mt-3">
+      <p class="font-semibold"> <span class="text-red-500"> * </span> Usuario </p>
+      <select [(ngModel)]="solicitudForm.usuarioId" class="input-generico w-full mt-2">
+        <option value=""> Seleccionar usuario </option>
+        <option *ngFor="let usuario of usuarios" [value]="usuario.id"> {{ usuario.apellido }} {{ usuario.nombre }} </option>
+      </select>
+    </div>
+    <div class="mt-3">
+      <p class="font-semibold"> <span class="text-red-500"> * </span> Tipo de solicitud </p>
+      <select [(ngModel)]="solicitudForm.tipoOrdenServicioId" class="input-generico w-full mt-2">
+        <option value=""> Seleccionar tipo </option>
+        <option *ngFor="let tipo of tiposOrdenServicio" [value]="tipo.id"> {{ tipo.descripcion }} </option>
+      </select>
+    </div> 
+    <div class="mt-3">
+      <p class="font-semibold"> <span class="text-red-500"> * </span> Detalles del problema </p>
+      <textarea [(ngModel)]="solicitudForm.observacionSolicitud" class="input-generico w-full mt-2" placeholder="Puedes detallar tu problema aquí"></textarea>
+    </div>
+    <button (click)="generarSolicitud()" class="w-full p-2 rounded bg-secondaryColor mt-2 text-white hover:opacity-90">
+      Solicitar asistencia
+    </button> 
+  </div>
+</div>
+
+

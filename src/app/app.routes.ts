@@ -95,10 +95,16 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/ordenes-servicio/ordenes-servicio.component'),
       },
 
+      // {
+      //   path: 'ordenServicio/nueva',
+      //   title: 'Nueva orden de servicio',
+      //   loadComponent: () => import('./pages/ordenes-servicio/nueva-orden-servicio/nueva-orden-servicio.component'),
+      // },
+
       {
         path: 'ordenServicio/nueva',
         title: 'Nueva orden de servicio',
-        loadComponent: () => import('./pages/ordenes-servicio/nueva-orden-servicio/nueva-orden-servicio.component'),
+        loadComponent: () => import('./pages/ordenes-servicio-final/nueva-orden-servicio-final/nueva-orden-servicio-final.component'),
       },
 
     ]

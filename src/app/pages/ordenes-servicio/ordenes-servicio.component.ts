@@ -42,6 +42,7 @@ export default class OrdenesServicioComponent implements OnInit {
   public estadoFormulario = 'detalles';
 
   // Orden de servicio
+  public motivoRechazo: string = '';
   public idOrden: string = '';
   public ordenes: any = [];
   public ordenSeleccionada: any;
@@ -88,6 +89,7 @@ export default class OrdenesServicioComponent implements OnInit {
   abrirModal(estado: string = "detalles", orden: any = null): void {
 
     this.estadoFormulario = estado;
+    this.motivoRechazo = '';
 
     if(estado === "detalles"){
       this.idOrden = '';
@@ -161,6 +163,35 @@ export default class OrdenesServicioComponent implements OnInit {
         this.alertService.loading();
         this.listarOrdenes();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
+    });
+
+  }
+
+  // Rechazar orden de servicio
+  rechazarOrden(): void {
+  
+    // Verificar: Motivo de rechazo vacio
+    if(!this.motivoRechazo){
+      return this.alertService.info('El motivo de rechazo es obligatorio');
+    }
+
+    this.alertService.question({ msg: 'Rechazando orden', buttonText: 'Rechazar' })
+    .then(({ isConfirmed }) => {
+      if (isConfirmed) {
+        this.alertService.loading();
+        this.ordenesServicioService.actualizarOrden(this.ordenSeleccionada.id, {
+          estadoOrden: 'Rechazada',
+          motivoRechazo: this.motivoRechazo,
+          fechaCierre: new Date()
+        }).subscribe({
+          next: () => {
+            this.ordenSeleccionada.estadoOrden = 'Rechazada';
+            this.ordenSeleccionada.motivoRechazo = this.motivoRechazo;
+            this.showModalDetalles = false;        
+            this.alertService.close();
+          }, error: ({ error }) => this.alertService.errorApi(error.message)
+        })
+      }
     });
 
   }

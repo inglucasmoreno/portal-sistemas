@@ -8,6 +8,7 @@ import gsap from 'gsap';
 import { CommonModule } from '@angular/common';
 import { DependenciasService } from '../../../services/dependencias.service';
 import { AuthService } from '../../../services/auth.service';
+import { ModalComponent } from '../../../components/modal/modal.component';
 
 @Component({
   standalone: true,
@@ -16,11 +17,16 @@ import { AuthService } from '../../../services/auth.service';
   imports: [
     RouterModule,
     ReactiveFormsModule,
+    ModalComponent,
     CommonModule
   ],
   styleUrls: []
 })
 export default class NuevoUsuarioComponent implements OnInit {
+
+  public showDependencias: boolean = false;
+  public dependenciasUsuario: any[] = [];	
+  public dependencias: any[] = [];
 
   get usuario() {
     return this.usuarioForm.get('usuario');
@@ -60,8 +66,6 @@ export default class NuevoUsuarioComponent implements OnInit {
 
   // Modelo reactivo
   public usuarioForm: FormGroup;
-
-  public dependencias: any[] = [];
 
   constructor(private fb: FormBuilder,
     private router: Router,
@@ -137,6 +141,19 @@ export default class NuevoUsuarioComponent implements OnInit {
       this.usuarioForm.markAllAsTouched();
     }
 
+  }
+
+  abrirDependencias(): void {
+    this.alertService.loading();
+    this.dependenciasService.listarDependencias({}).subscribe({
+      next: ({dependencias}) => {
+        console.log(dependencias);
+        this.showDependencias = true;
+        this.alertService.close();
+      }, error: () => this.alertService.errorApi('Error al cargar dependencias')
+    });
+    
+    
   }
 
 }
