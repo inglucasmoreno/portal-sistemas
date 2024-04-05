@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuarios } from '../../../interfaces/Usuarios.interface';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { AlertService } from '../../../services/alert.service';
@@ -9,13 +9,16 @@ import gsap from 'gsap';
 import { CommonModule } from '@angular/common';
 import { DependenciasService } from '../../../services/dependencias.service';
 import { AuthService } from '../../../services/auth.service';
+import { ModalComponent } from '../../../components/modal/modal.component';
 
 @Component({
   standalone: true,
   selector: 'app-editar-usuario',
   imports: [
     RouterModule,
+    FormsModule,
     ReactiveFormsModule,
+    ModalComponent,
     CommonModule
   ],
   templateUrl: './editar-usuario.component.html',
@@ -62,7 +65,12 @@ export default class EditarUsuarioComponent implements OnInit {
   public id: string;
   public usuario: Usuarios;
   public usuarioForm: FormGroup;
+
+  // Dependencias - Usuarios
+  public showDependencias: boolean = false;
   public dependencias: any[] = [];
+  public dependenciasUsuario: any[] = [];
+  public dependenciaSeleccionada: string = '';
 
   constructor(
     private router: Router,
@@ -96,12 +104,11 @@ export default class EditarUsuarioComponent implements OnInit {
 
     this.alertService.loading();
     this.dependenciasService.listarDependencias({}).subscribe({
-      next: ({dependencias}) => {
+      next: ({ dependencias }) => {
         this.dependencias = dependencias;
         this.getUsuario(); // Datos iniciales de usuarios
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     });
-
 
   }
 
@@ -115,7 +122,7 @@ export default class EditarUsuarioComponent implements OnInit {
       next: (usuarioRes) => {
 
         this.usuario = usuarioRes;
-        const { usuario, apellido, nombre, telefono, dni, email, role, activo } = this.usuario;
+        const { usuario, apellido, nombre, telefono, dni, email, role, UsuariosDependencias, activo } = this.usuario;
 
         this.usuarioForm.patchValue({
           usuario,
@@ -129,6 +136,8 @@ export default class EditarUsuarioComponent implements OnInit {
           activo: String(activo)
         });
 
+        UsuariosDependencias.length > 0 ? this.dependenciasUsuario.push(UsuariosDependencias[0]?.dependencia) : null;
+
         this.alertService.close();
 
       }, error: ({ error }) => this.alertService.errorApi(error.message)
@@ -139,10 +148,10 @@ export default class EditarUsuarioComponent implements OnInit {
   // Editar usuario
   editarUsuario(): void | boolean {
 
-    if(this.usuarioForm.valid){
+    if (this.usuarioForm.valid) {
 
-      // Se verifica si un usuario estandar tiene seleccionada una dependencia
-      if (this.usuarioForm.value.role === 'USER_ROLE' && this.usuarioForm.value.dependencia === '') {
+      // Si el usuario no es administrador debe seleccionar una dependencia
+      if (this.usuarioForm.value.role !== 'ADMIN_ROLE' && this.dependenciasUsuario.length === 0) {
         this.alertService.info('Debe seleccionar una dependencia');
         return;
       }
@@ -151,6 +160,7 @@ export default class EditarUsuarioComponent implements OnInit {
 
       let data: any = {
         ...this.usuarioForm.value,
+        dependencias: this.usuarioForm.value !== 'ADMIN_ROLE' ? this.dependenciasUsuario.map(dep => dep.id) : [],
         creatorUserId: this.authService.usuario.userId
       };
 
@@ -163,9 +173,48 @@ export default class EditarUsuarioComponent implements OnInit {
         }, error: ({ error }) => this.alertService.errorApi(error.message)
       });
 
-    }else{
+    } else {
       this.usuarioForm.markAllAsTouched();
     }
+  }
+
+  // Modal: Dependencias
+  abrirDependencias(): void {
+    this.alertService.loading();
+    this.dependenciasService.listarDependencias({}).subscribe({
+      next: ({ dependencias }) => {
+        this.showDependencias = true;
+        this.alertService.close();
+      }, error: () => this.alertService.errorApi('Error al cargar dependencias')
+    });
+  }
+
+  // Agregar dependencia
+  agregarDependencia(): void {
+
+    // Verificacion: Dependencia seleccionada 
+    if (this.dependenciaSeleccionada === '') {
+      this.alertService.info('Debe seleccionar una dependencia');
+      return;
+    }
+
+    // Verificacion: Dependencia repetida
+    const dependenciaRepetida = this.dependenciasUsuario.find(dep => dep.id == this.dependenciaSeleccionada);
+    if (dependenciaRepetida) {
+      this.alertService.info('La dependencia ya fue asignada');
+      return;
+    }
+
+    const dependencia = this.dependencias.find(dep => dep.id == this.dependenciaSeleccionada);
+    this.dependenciasUsuario.push(dependencia);
+    this.dependenciaSeleccionada = '';
+    this.showDependencias = false;
+
+  }
+
+  // Eliminar dependencia
+  eliminarDependencia(dependencia: any): void {
+    this.dependenciasUsuario = this.dependenciasUsuario.filter(dep => dep.id != dependencia);
   }
 
   // Funcion del boton regresar

@@ -1,3 +1,28 @@
+<app-modal [showModal]="showDependencias">
+  <div>
+    <div class="bg-gray-800 p-2 flex rounded-t items-center justify-between text-white">
+      <h1> Asignando dependencia </h1>
+      <button (click)="showDependencias = false" class="hover:text-secondaryColor">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="bg-white p-2 text-sm">
+      <select [(ngModel)]="dependenciaSeleccionada" class="input-generico w-full p-2">
+        <option value=""> Seleccionar dependencia </option>
+        <option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }} </option>
+      </select>
+      <button 
+        (click)="agregarDependencia()"
+        class="bg-secondaryColor p-2 rounded w-full text-white shadow mt-3 hover:opacity-90">  
+          Asignar dependencia 
+        </button>
+    </div>
+  </div>
+</app-modal>
+
 <div class="lg:flex p-4 max-w-5xl mx-auto gsap-contenido">
   <div class="w-full lg:w-1/2 bg-white mr-2 shadow rounded border border-gray-400">
     <div class="flex items-center p-2 bg-gray-800 border border-gray-800 rounded-t">
@@ -95,19 +120,6 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col lg:flex-row mt-3">
-        <div class="w-full mx-2 flex-1">
-          <div class="font-semibold text-gray-600 text-sm">
-            <span class="text-red-500"> * </span> Dependencia
-          </div>
-          <div class="bg-white p-1">
-            <select formControlName="dependencia" class="input-generico p-2 w-full">
-              <option value=""> Seleccionar dependencia </option>
-              <option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }} </option>
-            </select>
-          </div>
-        </div>
-      </div>
       <div class="flex flex-col lg:flex-row">
         <div class="w-full mx-2 flex-1">
           <div class="font-semibold mt-3 text-gray-600 text-sm">
@@ -172,5 +184,47 @@
         </div>
       </div>
     </div>
+
+    <!-- Dependencias -->
+    <div class="mt-2 text-sm">
+      <div class="border border-gray-800 flex items-center justify-between">
+        <h1 class="bg-gray-800 text-white p-2 font-semibold text-center w-full"> Dependencias asignadas </h1>
+        <!-- <button *ngIf="dependenciasUsuario.length === 0" (click)="abrirDependencias()" title="Agregar dependencia"
+          class="p-2 bg-white hover:text-se rounded border border-gray-400 hover:text-secondaryColor">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+        </button> -->
+      </div>
+    </div>
+
+    <div>
+      @for(dependencia of dependenciasUsuario; track dependencia.id ){
+      <div class="border border-gray-400 border-t-0 p-2 text-sm flex items-center justify-between">
+        <div class="flex items-center">
+          <img class="w-10" src="assets/svg/dependencia.svg" alt="dependencia.svg">
+          <p class="ml-2 font-semibold">
+            {{ dependencia?.nombre }}
+          </p>
+        </div>
+        <button title="Eliminar dependencia" (click)="eliminarDependencia(dependencia?.id)"
+          class="p-2 bg-red-100 border border-red-400 rounded">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      }@empty {
+      <div class="italic text-sm bg-gray-100 border border-gray-300 text-center p-2 mt-2 text-gray-600">
+        <p>
+          No se encontraron dependencias asociadas al usuario
+        </p>
+        <button (click)="abrirDependencias()" class="boton-crear mt-2"> Asignar dependecia </button>
+      </div>
+      }
+    </div>
+
   </div>
 </div>
