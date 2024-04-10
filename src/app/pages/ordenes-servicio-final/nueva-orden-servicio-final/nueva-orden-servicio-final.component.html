@@ -6,25 +6,46 @@
 
   <!-- Cuerpo de la solicitud -->
   <div class="text-sm">
-    <div class="mt-3">
+    <!-- <div *ngIf="authService.usuario.role !== 'USER_ROLE'" class="mt-3">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Usuario </p>
       <select [(ngModel)]="solicitudForm.usuarioId" class="input-generico w-full mt-2">
         <option value=""> Seleccionar usuario </option>
         <option *ngFor="let usuario of usuarios" [value]="usuario.id"> {{ usuario.apellido }} {{ usuario.nombre }} </option>
       </select>
+    </div> -->
+    <div class="mt-6">
+      <p class="font-semibold p-2 bg-gray-100 border-b"> <span class="text-red-500"> * </span> Usuario solicitante </p>
+      <input #buscadorUsuarios [(ngModel)]="filtroUsuarios.parametro" placeholder="DNI o Nombre de usuario" type="text" class="input-generico w-full mt-2">
+      <div *ngIf="usuarios.length > 0" class="w-96 text-sm border mt-1 border-gray-400 bg-white z-10 fixed">
+        <div class="flex items-center justify-between p-2 border-b border-gray-400">
+          <p class="font-semibold"> Listado de usuarios </p>
+          <button>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>            
+          </button>
+        </div>
+        <div class="max-h-64 overflow-y-auto">
+          <div class="p-2 border-b-2 cursor-pointer hover:bg-slate-100" *ngFor="let usuario of usuarios">
+            <p class="font-semibold"> {{ usuario.apellido }} {{ usuario.nombre }} </p>
+            <p class="text-xs text-gray-700"> DNI {{ usuario.dni }} </p>
+            <p class="text-xs text-gray-700"> {{ usuario.UsuariosDependencias[0] ? usuario.UsuariosDependencias[0].dependencia.nombre : 'Sin dependencia' }} </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="mt-3">
+    <div class="mt-6">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Tipo de solicitud </p>
       <select [(ngModel)]="solicitudForm.tipoOrdenServicioId" class="input-generico w-full mt-2">
         <option value=""> Seleccionar tipo </option>
         <option *ngFor="let tipo of tiposOrdenServicio" [value]="tipo.id"> {{ tipo.descripcion }} </option>
       </select>
     </div> 
-    <div class="mt-3">
+    <div class="mt-6">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Detalles del problema </p>
       <textarea [(ngModel)]="solicitudForm.observacionSolicitud" class="input-generico w-full mt-2" placeholder="Puedes detallar tu problema aquí"></textarea>
     </div>
-    <button (click)="generarSolicitud()" class="w-full p-2 rounded bg-secondaryColor mt-2 text-white hover:opacity-90">
+    <button (click)="generarSolicitud()" class="w-full p-2 rounded bg-secondaryColor mt-6 text-white hover:opacity-90">
       Solicitar asistencia
     </button> 
   </div>
