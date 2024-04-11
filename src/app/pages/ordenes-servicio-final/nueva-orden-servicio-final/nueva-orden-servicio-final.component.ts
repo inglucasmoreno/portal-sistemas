@@ -22,15 +22,17 @@ import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterViewInit {
 
   // Flags
+  public solicitudEnviada: boolean = false;
+
+  // Busqueda de usuarios
   public showUsuarios: boolean = false;
   public buscandoUsuarios: boolean = false;
-
-  public tiposOrdenServicio: any[] = [];
   public usuarios: any[] = [];
+  public usuarioSeleccionado: any = null;
+  public filtroUsuarios = { parametro: '' };
 
-  public filtroUsuarios = {
-    parametro: ''
-  }
+  // Ordenes de servicio
+  public tiposOrdenServicio: any[] = [];
 
   // Paginacion
   public totalItems: number;
@@ -78,7 +80,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     fromEvent<any>(this.buscadorUsuarios?.nativeElement, 'keyup')
       .pipe(
         map(event => event.target.value),
-        debounceTime(300),
+        debounceTime(500),
         distinctUntilChanged()
       ).subscribe(text => {
         this.filtroUsuarios.parametro = text;
@@ -90,13 +92,32 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
   }
 
   buscarUsuarios(): void {
+
+    if(this.filtroUsuarios.parametro.trim() === ''){
+      this.buscandoUsuarios = false;
+      return;
+    }
+
+    this.usuarios = [];
+
     this.usuariosService.listarUsuarios(1, 'apellido', '', this.filtroUsuarios.parametro).subscribe({
       next: ({ usuarios }) => {
         this.usuarios = usuarios;
-        console.log(usuarios);
+        this.buscandoUsuarios = false;
         this.alertService.close();
       }, error: ({error}) => this.alertService.errorApi(error.message)
     });
+  }
+
+  seleccionarUsuario(usuario: any): void {
+    this.filtroUsuarios.parametro = '';
+    this.usuarioSeleccionado = usuario;
+    this.usuarios = [];
+    console.log(usuario);
+  }
+
+  eliminarUsuario(): void {
+    this.usuarioSeleccionado = null;
   }
 
   generarSolicitud(): void {
@@ -110,7 +131,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
 
     // Verificaciones
     
-    if (!this.solicitudForm.usuarioId && this.authService.usuario.role === 'USER_ROLE') {
+    if (!this.usuarioSeleccionado && this.authService.usuario.role !== 'USER_ROLE') {
       this.alertService.info('Debe seleccionar un usuario');
       return;
     }
@@ -129,15 +150,11 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
 
     let dependenciaId = null;
 
-    if(this.authService.usuario.role === 'USER_ROLE'){
-      dependenciaId: this.authService.usuario.dependenciaId;
-    }else{
-      
-    }
+    this.authService.usuario.role === 'ADMIN_ROLE' ? dependenciaId = this.usuarioSeleccionado.UsuariosDependencias[0].dependencia.id : dependenciaId = this.authService.usuario.dependenciaId;
 
     const data = {
       usuarioId: this.authService.usuario.role === 'ADMIN_ROLE' ? this.authService.usuario.userId : usuarioId,
-      tipoOrdenServicioId,
+      tipoOrdenServicioId: Number(tipoOrdenServicioId),
       dependenciaId,
       creatorUserId, 
       observacionSolicitud
@@ -145,10 +162,22 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
 
     this.ordenesServicio.nuevaOrden(data).subscribe({
       next: () => {
-        
+        this.usuarioSeleccionado = null;
+        this.solicitudEnviada = true;
+        this.solicitudForm = {
+          usuarioId: '',
+          tipoOrdenServicioId: '',
+          creatorUserId: this.authService.usuario.userId,
+          observacionSolicitud: ''
+        }
+        this.alertService.close();
       }, error: ({error}) => this.alertService.errorApi(error.message)
     });
 
+  }
+
+  regresarFormulario(): void {
+    this.solicitudEnviada = false;
   }
 
 
