@@ -113,7 +113,6 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     this.filtroUsuarios.parametro = '';
     this.usuarioSeleccionado = usuario;
     this.usuarios = [];
-    console.log(usuario);
   }
 
   eliminarUsuario(): void {
@@ -150,15 +149,17 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
 
     let dependenciaId = null;
 
-    this.authService.usuario.role === 'ADMIN_ROLE' ? dependenciaId = this.usuarioSeleccionado.UsuariosDependencias[0].dependencia.id : dependenciaId = this.authService.usuario.dependenciaId;
+    this.authService.usuario.role === 'ADMIN_ROLE' ? 
+      dependenciaId = this.usuarioSeleccionado.UsuariosDependencias[0].dependencia.id : 
+      dependenciaId = this.authService.usuario.dependencia.id;
 
     const data = {
-      usuarioId: this.authService.usuario.role === 'ADMIN_ROLE' ? this.authService.usuario.userId : usuarioId,
+      usuarioId: this.authService.usuario.role === 'USER_ROLE' ? this.authService.usuario.userId : this.usuarioSeleccionado.id,
       tipoOrdenServicioId: Number(tipoOrdenServicioId),
       dependenciaId,
       creatorUserId, 
       observacionSolicitud
-    };
+    }; 
 
     this.ordenesServicio.nuevaOrden(data).subscribe({
       next: () => {
