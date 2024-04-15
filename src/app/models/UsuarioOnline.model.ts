@@ -5,7 +5,8 @@ export class UsuarioOnline {
       public usuario: string,
       public nombre: string,
       public apellido: string,
+      public telefono: string,
+      public dependencia: any,
       public role: string,
-      public dependencia: any
   ){}
 }

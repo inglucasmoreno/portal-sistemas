@@ -43,6 +43,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
   solicitudForm: any = {
     usuarioId: '',
     tipoOrdenServicioId: '',
+    telefonoContacto: '',
     creatorUserId: this.authService.usuario.userId,
     observacionSolicitud: ''
   }
@@ -63,6 +64,11 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     this.dataService.ubicacionActual = "Nueva orden de servicio";
 
     this.alertService.loading();
+
+    console.log(this.authService.usuario)
+
+    this.authService.usuario.role === 'USER_ROLE' ?
+    this.solicitudForm.telefonoContacto = this.authService.usuario.telefono : null;
 
     // Listar tipos de solicitudes
     this.tiposOrdenServicioService.listarTipos({}).subscribe({
@@ -112,10 +118,12 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
   seleccionarUsuario(usuario: any): void {
     this.filtroUsuarios.parametro = '';
     this.usuarioSeleccionado = usuario;
+    this.solicitudForm.telefonoContacto = usuario.telefono;
     this.usuarios = [];
   }
 
   eliminarUsuario(): void {
+    this.solicitudForm.telefonoContacto = '';
     this.usuarioSeleccionado = null;
   }
 
@@ -132,6 +140,11 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     
     if (!this.usuarioSeleccionado && this.authService.usuario.role !== 'USER_ROLE') {
       this.alertService.info('Debe seleccionar un usuario');
+      return;
+    }
+
+    if (!this.solicitudForm.telefonoContacto) {
+      this.alertService.info('Debe ingresar un telefono de contacto');
       return;
     }
 
@@ -168,6 +181,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
         this.solicitudForm = {
           usuarioId: '',
           tipoOrdenServicioId: '',
+          telefonoContacto: '',
           creatorUserId: this.authService.usuario.userId,
           observacionSolicitud: ''
         }

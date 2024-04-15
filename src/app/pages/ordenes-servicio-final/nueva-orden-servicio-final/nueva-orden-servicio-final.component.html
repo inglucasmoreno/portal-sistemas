@@ -97,6 +97,10 @@
       </select>
     </div>
     <div class="mt-6">
+      <p class="font-semibold"> <span class="text-red-700"> * </span> Telefono de contacto </p>
+      <input type="text" [(ngModel)]="solicitudForm.telefonoContacto" placeholder="Ej. 2664869642" class="input-generico w-full mt-2">
+    </div>
+    <div class="mt-6">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Detalles del problema </p>
       <textarea [(ngModel)]="solicitudForm.observacionSolicitud" class="input-generico w-full mt-2"
         placeholder="Debe detallar su problema aquí"></textarea>
