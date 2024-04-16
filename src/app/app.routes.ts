@@ -91,20 +91,20 @@ export const routes: Routes = [
 
       {
         path: 'ordenesServicio',
-        title: 'Ordenes de servicio',
-        loadComponent: () => import('./pages/ordenes-servicio/ordenes-servicio.component'),
+        title: 'Solicitudes de asistencia',
+        loadComponent: () => import('./pages/ordenes-servicio-final/ordenes-servicio-final.component'),
       },
-
-      // {
-      //   path: 'ordenServicio/nueva',
-      //   title: 'Nueva orden de servicio',
-      //   loadComponent: () => import('./pages/ordenes-servicio/nueva-orden-servicio/nueva-orden-servicio.component'),
-      // },
 
       {
         path: 'ordenServicio/nueva',
-        title: 'Nueva orden de servicio',
+        title: 'Nueva solicitud',
         loadComponent: () => import('./pages/ordenes-servicio-final/nueva-orden-servicio-final/nueva-orden-servicio-final.component'),
+      },
+
+      {
+        path: 'ordenServicio/detalles/:id',
+        title: 'Detalles de solicitud',
+        loadComponent: () => import('./pages/ordenes-servicio-final/detalles-orden-servicio-final/detalles-orden-servicio-final.component'),
       },
 
     ]

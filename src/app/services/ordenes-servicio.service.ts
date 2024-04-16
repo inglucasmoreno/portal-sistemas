@@ -22,11 +22,20 @@ export class OrdenesServicioService {
     })
   }
 
-  listarOrdenes({ direccion = 'desc', columna = 'createdAt' }): Observable<any> {
+  listarOrdenes({ 
+    direccion = 'desc', 
+    columna = 'createdAt',
+    estado = '',
+    dependencia = '',
+    pagina = 1,
+    itemsPorPagina = 100000,
+  }): Observable<any> {
     return this.http.get(urlApi, {
       params: {
         direccion: String(direccion),
-        columna
+        columna,
+        estado,
+        dependencia
       },
       headers: this.getToken
     })

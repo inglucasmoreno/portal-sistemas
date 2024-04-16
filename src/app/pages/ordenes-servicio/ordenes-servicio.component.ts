@@ -77,7 +77,7 @@ export default class OrdenesServicioComponent implements OnInit {
     this.dataService.ubicacionActual = 'Dashboard - Ordenes de servicio';
 
     this.ordenForm = this.fb.group({
-
+      
     });
 
     this.alertService.loading();

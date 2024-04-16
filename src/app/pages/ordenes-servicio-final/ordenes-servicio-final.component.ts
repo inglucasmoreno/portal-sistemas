@@ -8,6 +8,11 @@ import { RouterModule } from '@angular/router';
 import { PastillaEstadoComponent } from '../../components/pastilla-estado/pastilla-estado.component';
 import { TarjetaListaComponent } from '../../components/tarjeta-lista/tarjeta-lista.component';
 import { FiltroOrdenesServicioPipe } from '../../pipes/filtro-ordenes-servicio.pipe';
+import { AlertService } from '../../services/alert.service';
+import { OrdenesServicioService } from '../../services/ordenes-servicio.service';
+import { DataService } from '../../services/data.service';
+import { FechaHoraPipe } from '../../pipes/fecha-hora.pipe';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -15,6 +20,7 @@ import { FiltroOrdenesServicioPipe } from '../../pipes/filtro-ordenes-servicio.p
   imports: [
     CommonModule,
     FormsModule,
+    FechaHoraPipe,
     FechaPipe,
     ModalComponent,
     NgxPaginationModule,
@@ -26,11 +32,85 @@ import { FiltroOrdenesServicioPipe } from '../../pipes/filtro-ordenes-servicio.p
   templateUrl: './ordenes-servicio-final.component.html',
   styleUrls: []
 })
-export class OrdenesServicioFinalComponent implements OnInit {
+export default class OrdenesServicioFinalComponent implements OnInit {
 
-  constructor() { }
+  public ordenes: any = [];
+
+  // Filtrado
+  public filtro = {
+    activo: 'true',
+    parametro: '',
+    estado: 'Pendiente',
+  }
+
+  // Ordenar
+  public ordenar = {
+    direccion: 'desc',  // Asc (1) | Desc (-1)
+    columna: 'createdAt'
+  }
+
+  // Paginacion
+  public totalItems: number;
+  public paginaActual: number = 1;
+  public cantidadItems: number = 10;
+
+  constructor(
+    private dataService: DataService,
+    private authService: AuthService,
+    private alertService: AlertService,
+    private ordenesServicioService: OrdenesServicioService,
+  ) { }
 
   ngOnInit() {
+    this.dataService.ubicacionActual = 'Dashboard - Ordenes de Servicio';
+    this.listarOrdenes();
+  }
+
+  // Listar ordenes
+  listarOrdenes(): void {
+    const parametros: any = {
+      direccion: this.ordenar.direccion,
+      columna: this.ordenar.columna,
+      estado: this.filtro.estado,
+      dependencia: this.authService.usuario.role === 'USER_ROLE' ? this.authService.usuario.dependencia.id : '',
+      pagina: this.paginaActual,
+      itemsPorPagina: this.cantidadItems,
+    }
+    this.alertService.loading();
+    this.ordenesServicioService.listarOrdenes(parametros).subscribe({
+      next: ({ ordenes, totalItems }) => {
+        this.totalItems = totalItems;
+        this.ordenes = ordenes;
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
+  }
+
+  // Filtrar Activo/Inactivo
+  filtrarActivos(activo: any): void {
+    this.paginaActual = 1;
+    this.filtro.activo = activo;
+  }
+
+  // Filtrar por Parametro
+  filtrarParametro(parametro: string): void {
+    this.paginaActual = 1;
+    this.filtro.parametro = parametro;
+  }
+
+  // Ordenar por columna
+  ordenarPorColumna(columna: string) {
+    this.ordenar.columna = columna;
+    this.ordenar.direccion = this.ordenar.direccion == 'asc' ? 'desc' : 'asc';
+    this.alertService.loading();
+    this.listarOrdenes();
+  }
+
+  // Paginacion - Cambiar pagina
+  cambiarPagina(nroPagina): void {
+    this.paginaActual = nroPagina;
+    // this.desde = (this.paginaActual - 1) * this.cantidadItems;
+    this.listarOrdenes();
   }
 
 }

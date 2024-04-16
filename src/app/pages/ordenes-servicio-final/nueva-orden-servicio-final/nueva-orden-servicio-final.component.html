@@ -1,5 +1,3 @@
-
-
 <div [ngClass]="{'hidden':!solicitudEnviada}" class="w-1/2 mx-auto p-2 mt-10">
   <h1 class="text-center font-semibold text-4xl"> Gracias por enviar su solicitud </h1>
   <h2 class="text-gray-600 text-center mt-2"> Pronto nos comunicaremos con usted </h2>
@@ -26,20 +24,24 @@
         <option *ngFor="let usuario of usuarios" [value]="usuario.id"> {{ usuario.apellido }} {{ usuario.nombre }} </option>
       </select>
     </div> -->
-    <div class="mt-6">
+    <div>
 
       <!-- Busqueda de usuarios -->
       <div class="flex items-center">
-        <p *ngIf="authService.usuario.role !== 'USER_ROLE'" class="font-semibold"> <span class="text-red-500"> * </span> Usuario solicitante </p>
+        <p *ngIf="authService.usuario.role !== 'USER_ROLE'" class="font-semibold mt-6"> <span class="text-red-500"> * </span>
+          Usuario solicitante </p>
         <span *ngIf="buscandoUsuarios" class="text-primaryColor ml-2 animate-spin">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-          </svg>          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
         </span>
       </div>
       <div [ngClass]="{'hidden':usuarioSeleccionado || authService.usuario.role === 'USER_ROLE'}">
-        <input [ngClass]="{'bg-fuchsia-300 text-gray-700':buscandoUsuarios}" #buscadorUsuarios [(ngModel)]="filtroUsuarios.parametro"
-          placeholder="DNI o Nombre de usuario" type="text" class="input-generico w-full mt-2">
+        <input [ngClass]="{'bg-fuchsia-300 text-gray-700':buscandoUsuarios}" #buscadorUsuarios
+          [(ngModel)]="filtroUsuarios.parametro" placeholder="DNI o Nombre de usuario" type="text"
+          class="input-generico w-full mt-2">
       </div>
 
       <!-- Lista desplegable -->
@@ -55,8 +57,8 @@
           </button>
         </div>
         <div class="max-h-64 overflow-y-auto">
-          <div (click)="seleccionarUsuario(usuario)" class="p-2 border-b-2 flex items-center cursor-pointer hover:bg-slate-100"
-            *ngFor="let usuario of usuarios">
+          <div (click)="seleccionarUsuario(usuario)"
+            class="p-2 border-b-2 flex items-center cursor-pointer hover:bg-slate-100" *ngFor="let usuario of usuarios">
             <img src="assets/svg/usuario.svg" class="w-10" alt="Usuario">
             <div class="ml-3">
               <p class="font-semibold"> {{ usuario.apellido }} {{ usuario.nombre }} </p>
@@ -80,14 +82,21 @@
                 usuarioSeleccionado.UsuariosDependencias[0].dependencia.nombre : 'Sin dependencia' }} </p>
             </div>
           </div>
-          <button title="Eliminar usuario" (click)="eliminarUsuario()" class="border border-red-500 bg-red-100 p-2 rounded">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <button title="Eliminar usuario" (click)="eliminarUsuario()"
+            class="border border-red-500 bg-red-100 p-2 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>          
+            </svg>
           </button>
         </div>
       </div>
 
+    </div>
+    <div class="mt-6">
+      <p class="font-semibold"> <span class="text-red-700"> * </span> Telefono de contacto </p>
+      <input type="text" [(ngModel)]="solicitudForm.telefonoContacto" placeholder="Ej. 2664869642"
+        class="input-generico w-full mt-2">
     </div>
     <div class="mt-6">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Tipo de solicitud </p>
@@ -95,10 +104,6 @@
         <option value=""> Seleccionar tipo </option>
         <option *ngFor="let tipo of tiposOrdenServicio" [value]="tipo.id"> {{ tipo.descripcion }} </option>
       </select>
-    </div>
-    <div class="mt-6">
-      <p class="font-semibold"> <span class="text-red-700"> * </span> Telefono de contacto </p>
-      <input type="text" [(ngModel)]="solicitudForm.telefonoContacto" placeholder="Ej. 2664869642" class="input-generico w-full mt-2">
     </div>
     <div class="mt-6">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Detalles del problema </p>

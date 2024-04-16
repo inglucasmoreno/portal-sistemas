@@ -61,7 +61,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
   ) { }
 
   ngOnInit() {
-    this.dataService.ubicacionActual = "Nueva orden de servicio";
+    this.dataService.ubicacionActual = "Dashboard - Nueva solicitud";
 
     this.alertService.loading();
 
@@ -132,6 +132,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     const {
       usuarioId,
       tipoOrdenServicioId,
+      telefonoContacto,
       observacionSolicitud,
       creatorUserId
     } = this.solicitudForm;
@@ -143,17 +144,17 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
       return;
     }
 
-    if (!this.solicitudForm.telefonoContacto) {
+    if (!telefonoContacto) {
       this.alertService.info('Debe ingresar un telefono de contacto');
       return;
     }
 
-    if (!this.solicitudForm.tipoOrdenServicioId) {
+    if (!tipoOrdenServicioId) {
       this.alertService.info('Debe seleccionar un tipo de orden de servicio');
       return;
     }
 
-    if (!this.solicitudForm.observacionSolicitud) {
+    if (!observacionSolicitud) {
       this.alertService.info('Debe ingresar un detalle');
       return;
     }
@@ -169,8 +170,9 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     const data = {
       usuarioId: this.authService.usuario.role === 'USER_ROLE' ? this.authService.usuario.userId : this.usuarioSeleccionado.id,
       tipoOrdenServicioId: Number(tipoOrdenServicioId),
+      telefonoContacto,
       dependenciaId,
-      creatorUserId, 
+      creatorUserId,
       observacionSolicitud
     }; 
 
