@@ -26,6 +26,7 @@
                 <select [(ngModel)]="filtro.estado" (change)="cambiarPagina(1)"
                   class="h-full text-sm rounded-r border-t border-l rounded-l sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
                   <option value='Pendiente'> Pendientes </option>
+                  <option value='En proceso'> En proceso </option>
                   <option value='Completada'> Completadas </option>
                   <option value='Rechazada'> Rechazadas </option>
                   <option value=''> Todas </option>
@@ -221,7 +222,7 @@
                     </p>
                   </td>
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                    <p [ngClass]="{'bg-yellow-500':orden.estadoOrden === 'Pendiente', 'bg-red-500':orden.estadoOrden === 'Rechazada', 'bg-green-700':orden.estadoOrden === 'Completada'}"
+                    <p [ngClass]="{'bg-yellow-500':orden.estadoOrden === 'Pendiente', 'bg-red-500':orden.estadoOrden === 'Rechazada', 'bg-green-700':orden.estadoOrden === 'Completada', 'bg-blue-700':orden.estadoOrden === 'En proceso'}"
                       class="text-white w-max whitespace-no-wrap p-1 rounded">
                       {{ orden.estadoOrden }}
                     </p>
@@ -245,7 +246,7 @@
                 }@empty {
                 <tr class="p-4 text-white"> a </tr>
                 <tr class="w-full">
-                  <td colspan="4" class="text-gray-500 text-sm p-2 border border-gray-300 text-center bg-gray-50 mt-4">
+                  <td colspan="6" class="text-gray-500 text-sm p-2 border border-gray-300 text-center bg-gray-50 mt-4">
                     No se encontraron ordenes </td>
                 </tr>
                 }

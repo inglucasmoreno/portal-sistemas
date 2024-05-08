@@ -10,10 +10,16 @@
       </button>
     </div>
     <div class="bg-white p-2 text-sm">
-      <select [(ngModel)]="dependenciaSeleccionada" class="input-generico w-full p-2">
+
+      <ng-select [(ngModel)]="dependenciaSeleccionada" class="w-full p-2">
+        <ng-option value=''> Seleccionar dependencia </ng-option>
+        <ng-option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }} </ng-option>
+      </ng-select>
+
+      <!-- <select [(ngModel)]="dependenciaSeleccionada" class="input-generico w-full p-2">
         <option value=""> Seleccionar dependencia </option>
         <option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }} </option>
-      </select>
+      </select> -->
       <button (click)="agregarDependencia()"
         class="bg-secondaryColor p-2 rounded w-full text-white shadow mt-3 hover:opacity-90">
         Asignar dependencia

@@ -8,6 +8,7 @@ import { DataService } from '../../../services/data.service';
 import { TiposOrdenServicioService } from '../../../services/tipos-orden-servicio.service';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
+import { OrdenesServicioHistorialService } from '../../../services/ordenes-servicio-historial.service';
 
 @Component({
   standalone: true,
@@ -56,6 +57,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     public authService: AuthService,
     private alertService: AlertService,
     private ordenesServicio: OrdenesServicioService,
+    private ordenesServicioHistorial: OrdenesServicioHistorialService,
     private usuariosService: UsuariosService,
     private tiposOrdenServicioService: TiposOrdenServicioService
   ) { }
@@ -177,17 +179,29 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     }; 
 
     this.ordenesServicio.nuevaOrden(data).subscribe({
-      next: () => {
-        this.usuarioSeleccionado = null;
-        this.solicitudEnviada = true;
-        this.solicitudForm = {
-          usuarioId: '',
-          tipoOrdenServicioId: '',
-          telefonoContacto: '',
-          creatorUserId: this.authService.usuario.userId,
-          observacionSolicitud: ''
+      next: ({ orden }) => {
+
+        const dataHistorial = {
+          ordenServicioId: orden.id,
+          tipo: 'Generada',
+          creatorUserId: this.authService.usuario.userId
         }
-        this.alertService.close();
+
+        this.ordenesServicioHistorial.nuevaRelacion(dataHistorial).subscribe({
+          next: () => {
+            this.usuarioSeleccionado = null;
+            this.solicitudEnviada = true;
+            this.solicitudForm = {
+              usuarioId: '',
+              tipoOrdenServicioId: '',
+              telefonoContacto: '',
+              creatorUserId: this.authService.usuario.userId,
+              observacionSolicitud: ''
+            }
+            this.alertService.close();
+          }, error: ({ error }) => this.alertService.errorApi(error.message)
+        })
+        
       }, error: ({error}) => this.alertService.errorApi(error.message)
     });
 

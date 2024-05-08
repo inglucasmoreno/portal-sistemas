@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { DependenciasService } from '../../../services/dependencias.service';
 import { AuthService } from '../../../services/auth.service';
 import { ModalComponent } from '../../../components/modal/modal.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   standalone: true,
@@ -18,6 +19,7 @@ import { ModalComponent } from '../../../components/modal/modal.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule,
     ModalComponent,
     CommonModule
   ],
@@ -119,8 +121,8 @@ export default class NuevoUsuarioComponent implements OnInit {
       return;
     }
 
-    // Si el usuario no es administrador debe seleccionar una dependencia
-    if (this.usuarioForm.value.role !== 'ADMIN_ROLE' && this.dependenciasUsuario.length === 0) {
+    // El usuario debe seleccionar una dependencia
+    if (this.dependenciasUsuario.length === 0) {
       this.alertService.info('Debe seleccionar una dependencia');
       return;
     }
@@ -133,8 +135,6 @@ export default class NuevoUsuarioComponent implements OnInit {
     };
 
     delete dataUsuario.repetir;
-
-    console.log(dataUsuario);
 
     if (this.usuarioForm.valid) {
       this.alertService.loading();
