@@ -9,13 +9,15 @@ import { CommonModule } from '@angular/common';
 import { OrdenesServicioService } from '../../../services/ordenes-servicio.service';
 import gsap from 'gsap';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   standalone: true,
   selector: 'app-nueva-orden-servicio',
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgSelectModule
   ],
   templateUrl: './nueva-orden-servicio.component.html',
   styleUrls: []

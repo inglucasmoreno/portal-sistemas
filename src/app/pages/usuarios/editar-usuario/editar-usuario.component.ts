@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { DependenciasService } from '../../../services/dependencias.service';
 import { AuthService } from '../../../services/auth.service';
 import { ModalComponent } from '../../../components/modal/modal.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   standalone: true,
@@ -19,7 +20,8 @@ import { ModalComponent } from '../../../components/modal/modal.component';
     FormsModule,
     ReactiveFormsModule,
     ModalComponent,
-    CommonModule
+    CommonModule,
+    NgSelectModule
   ],
   templateUrl: './editar-usuario.component.html',
   styleUrls: []

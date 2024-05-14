@@ -9,6 +9,7 @@ import { TiposOrdenServicioService } from '../../../services/tipos-orden-servici
 import { UsuariosService } from '../../../services/usuarios.service';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { OrdenesServicioHistorialService } from '../../../services/ordenes-servicio-historial.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   standalone: true,
@@ -17,7 +18,8 @@ import { OrdenesServicioHistorialService } from '../../../services/ordenes-servi
   styleUrls: [],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgSelectModule
   ],
 })
 export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterViewInit {
@@ -67,8 +69,6 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
 
     this.alertService.loading();
 
-    console.log(this.authService.usuario)
-
     this.authService.usuario.role === 'USER_ROLE' ?
     this.solicitudForm.telefonoContacto = this.authService.usuario.telefono : null;
 
@@ -77,7 +77,6 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
       next: ({ tipos }) => {
         this.tiposOrdenServicio = tipos;
         this.alertService.close();
-        // this.buscarUsuarios();
       }, error: ({error}) => this.alertService.errorApi(error.message)
     });
   }

@@ -39,6 +39,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
   // Tecnico seleccionado
   public tecnicoSeleccionado = '';
   public tecnicosAsignados: any[] = [];
+  public tecnicosParaAsignar: any[] = [];
 
   // Rechazo de solicitud
   public showRechazar: boolean = false;
@@ -74,6 +75,8 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
     this.ordenesServicio.getOrden(this.idSolicitud).subscribe({
       next: ({ orden }) => {
         this.orden = orden;
+        this.tecnicosAsignados = orden.ordenesServicioTecnico;
+        console.log(this.tecnicosAsignados);
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
@@ -171,7 +174,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
 
   abrirAsignacion(): void {
     this.tecnicoSeleccionado = '';
-    this.tecnicosAsignados = [];
+    this.tecnicosParaAsignar = [];
     this.alertService.loading();
     this.usuariosService.listarUsuarios().subscribe({
       next: ({ usuarios }) => {
@@ -188,20 +191,20 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
       return;
     }
     const tecnico = this.tecnicos.find(t => t.id === this.tecnicoSeleccionado);
-    this.tecnicosAsignados.push(tecnico);
+    this.tecnicosParaAsignar.push(tecnico);
     this.tecnicos = this.tecnicos.filter(t => t.id !== this.tecnicoSeleccionado);
     this.tecnicoSeleccionado = '';
   }
 
   eliminarTecnico(tecnicoId: string): void {
-    const tecnico = this.tecnicosAsignados.find(t => t.id === tecnicoId);
-    this.tecnicosAsignados = this.tecnicosAsignados.filter(t => t.id !== tecnicoId);
+    const tecnico = this.tecnicosParaAsignar.find(t => t.id === tecnicoId);
+    this.tecnicosParaAsignar = this.tecnicosParaAsignar.filter(t => t.id !== tecnicoId);
     this.tecnicos.push(tecnico);
   }
 
   asignarTecnicos(): void {
     
-    if(this.tecnicosAsignados.length === 0) {
+    if(this.tecnicosParaAsignar.length === 0) {
       this.alertService.info('Debes seleccionar al menos un técnico');
       return;
     }
@@ -211,7 +214,8 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
       ordenServicioId: this.idSolicitud,
       creatorUserId: this.authService.usuario.userId
     };
-    this.tecnicosAsignados.forEach(t => data.tecnicos.push({ id: t.id }));
+
+    this.tecnicosParaAsignar.forEach(t => data.tecnicos.push({ id: t.id }));
 
     this.alertService.question({ msg: '¿Quieres asignar el/los técnicos a la solicitud?', buttonText: 'Aceptar' })
       .then(({ isConfirmed }) => {
@@ -219,7 +223,21 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
           this.alertService.loading();
           this.ordenesServicioToTecnicosService.nuevaOrdenTecnico(data).subscribe({
             next: () => {
-              this.alertService.close();
+
+              const dataHistorial = {
+                tipo: 'En proceso',
+                tecnicos: data.tecnicos,
+                ordenServicioId: this.orden.id,
+                creatorUserId: this.authService.usuario.userId,
+              }
+              // Actualizacion de historial
+              this.ordenesServicioHistorialService.nuevaRelacion(dataHistorial).subscribe({
+                next: () => {
+                  this.alertService.close();
+                  this.router.navigateByUrl('/dashboard/ordenesServicio');
+                }, error: ({ error }) => this.alertService.errorApi(error.message)
+              });
+
             }, error: ({ error }) => this.alertService.errorApi(error.message)
           })
         }

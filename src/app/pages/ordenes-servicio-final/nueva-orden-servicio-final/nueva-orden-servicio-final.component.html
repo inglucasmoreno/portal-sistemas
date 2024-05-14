@@ -38,6 +38,7 @@
           </svg>
         </span>
       </div>
+
       <div [ngClass]="{'hidden':usuarioSeleccionado || authService.usuario.role === 'USER_ROLE'}">
         <input [ngClass]="{'bg-fuchsia-300 text-gray-700':buscandoUsuarios}" #buscadorUsuarios
           [(ngModel)]="filtroUsuarios.parametro" placeholder="DNI o Nombre de usuario" type="text"

@@ -24,8 +24,8 @@
       </div>
       <div class="px-2">
         <p class="font-semibold p-2 bg-gray-100 border border-gray-300"> Usuarios asignados </p>
-        <p *ngIf="tecnicosAsignados.length === 0" class="text-gray-500 italic text-sm mt-2"> No se encontraron usuario </p>
-        <div class="p-2 flex mt-1 items-center justify-between border-b border-gray-300" *ngFor="let tecnico of tecnicosAsignados">
+        <p *ngIf="tecnicosParaAsignar.length === 0" class="text-gray-500 italic text-sm mt-2"> No se encontraron usuario </p>
+        <div class="p-2 flex mt-1 items-center justify-between border-b border-gray-300" *ngFor="let tecnico of tecnicosParaAsignar">
           <p> {{ tecnico.apellido }} {{ tecnico.nombre }} </p>
           <button title="Eliminar tecnico" (click)="eliminarTecnico(tecnico.id)" class="text-red-700">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -115,7 +115,11 @@
 
       <!-- Seccion: Detalles -->
       <div *ngIf="showSeccion === 'Detalles'">
-        <div class="mt-4 border-y">
+        <div class="mt-4">
+          <p class="p-2"> <span class="font-semibold"> Tecnicos asignados: </span> 
+            <span class="text-xs py-1 px-2 bg-blue-100 border border-blue-300 ml-2 rounded" *ngFor="let elemento of tecnicosAsignados"> {{ elemento.tecnico.apellido }} {{ elemento.tecnico.nombre }} </span> </p>
+        </div>
+        <div class="border-y">
           <p class="p-2"> <span class="font-semibold"> Nro de solicitud: </span> <span> {{ orden?.id }} </span> </p>
         </div>
         <div>
@@ -170,6 +174,16 @@
           <div *ngIf="elemento.tipo === 'Generada'" class="border-l-8 border-green-400 rounded-l p-2">
             <div class="flex items-center justify-between">
               <p class="font-semibold"> Solicitud generada </p>
+              <p> {{ elemento.createdAt | fechaHora }} </p>
+            </div>
+            <p class="mt-2"> <span class="font-semibold"> Usuario: </span> {{ elemento.creatorUser.apellido }} {{
+              elemento.creatorUser.nombre }} </p>
+          </div>
+
+          <!-- Solicitud en proceso -->
+          <div *ngIf="elemento.tipo === 'En proceso'" class="border-l-8 border-blue-400 rounded-l p-2">
+            <div class="flex items-center justify-between">
+              <p class="font-semibold"> En proceso </p>
               <p> {{ elemento.createdAt | fechaHora }} </p>
             </div>
             <p class="mt-2"> <span class="font-semibold"> Usuario: </span> {{ elemento.creatorUser.apellido }} {{
