@@ -45,6 +45,9 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
   public showRechazar: boolean = false;
   public motivoRechazo: string = '';
 
+  // Historial
+  public historialOrden: any[] = [];
+
   public idSolicitud = '';
   public orden = null;
   public tecnicos: any[] = []
@@ -75,8 +78,9 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
     this.ordenesServicio.getOrden(this.idSolicitud).subscribe({
       next: ({ orden }) => {
         this.orden = orden;
+        this.historialOrden = this.orden.ordenesServicioHistorial;
+        console.log(this.historialOrden);
         this.tecnicosAsignados = orden.ordenesServicioTecnico;
-        console.log(this.tecnicosAsignados);
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
