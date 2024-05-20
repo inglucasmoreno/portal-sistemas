@@ -13,6 +13,7 @@ import { OrdenesServicioService } from '../../services/ordenes-servicio.service'
 import { DataService } from '../../services/data.service';
 import { FechaHoraPipe } from '../../pipes/fecha-hora.pipe';
 import { AuthService } from '../../services/auth.service';
+import { LimitarStringPipe } from '../../pipes/limitar-string.pipe';
 
 @Component({
   standalone: true,
@@ -27,7 +28,8 @@ import { AuthService } from '../../services/auth.service';
     RouterModule,
     PastillaEstadoComponent,
     TarjetaListaComponent,
-    FiltroOrdenesServicioPipe
+    FiltroOrdenesServicioPipe,
+    LimitarStringPipe
   ],
   templateUrl: './ordenes-servicio-final.component.html',
   styleUrls: []
@@ -35,6 +37,11 @@ import { AuthService } from '../../services/auth.service';
 export default class OrdenesServicioFinalComponent implements OnInit {
 
   public ordenes: any = [];
+
+  // Dependencias
+  public dependencias: any = [];
+  public dependenciaSeleccionada: any = null;
+  public dependenciaSeleccionadaNombre: string = '';
 
   // Filtrado
   public filtro = {
@@ -56,13 +63,16 @@ export default class OrdenesServicioFinalComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private authService: AuthService,
+    public authService: AuthService,
     private alertService: AlertService,
     private ordenesServicioService: OrdenesServicioService,
   ) { }
 
   ngOnInit() {
-    this.dataService.ubicacionActual = 'Dashboard - Ordenes de Servicio';
+    this.dataService.ubicacionActual = 'Dashboard - Listado de solicitudes';
+    this.dependencias = this.authService.usuario.dependencias;
+    this.dependenciaSeleccionada = this.dependencias[0].idDependencia;
+    this.nombreDependenciaSeleccionada();
     this.listarOrdenes();
   }
 
@@ -72,7 +82,7 @@ export default class OrdenesServicioFinalComponent implements OnInit {
       direccion: this.ordenar.direccion,
       columna: this.ordenar.columna,
       estado: this.filtro.estado,
-      dependencia: this.authService.usuario.role === 'USER_ROLE' ? this.authService.usuario.dependencia.id : '',
+      dependencia: this.authService.usuario.role === 'USER_ROLE' ? this.dependenciaSeleccionada : '',
       pagina: this.paginaActual,
       itemsPorPagina: this.cantidadItems,
     }
@@ -81,9 +91,15 @@ export default class OrdenesServicioFinalComponent implements OnInit {
       next: ({ ordenes, totalItems }) => {
         this.totalItems = totalItems;
         this.ordenes = ordenes;
+        console.log(this.ordenes);
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
+  }
+
+  // Nombre - Dependencia seleccionada
+  nombreDependenciaSeleccionada(): void {
+    this.dependenciaSeleccionadaNombre = this.dependencias.find((dependencia) => dependencia.idDependencia === Number(this.dependenciaSeleccionada)).nombre;
   }
 
   // Filtrar Activo/Inactivo
@@ -110,6 +126,7 @@ export default class OrdenesServicioFinalComponent implements OnInit {
   cambiarPagina(nroPagina): void {
     this.paginaActual = nroPagina;
     // this.desde = (this.paginaActual - 1) * this.cantidadItems;
+    this.nombreDependenciaSeleccionada();
     this.listarOrdenes();
   }
 

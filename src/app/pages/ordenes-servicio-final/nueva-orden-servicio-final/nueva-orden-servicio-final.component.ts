@@ -90,7 +90,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
           });
         }
       })
-      this.dependenciasUsuario.length > 0 ? this.dependenciaSeleccionada = this.authService.usuario.dependencias[0].idDependencia : null;
+      this.dependenciasUsuario.length > 0 ? this.dependenciaSeleccionada = this.dependenciasUsuario[0].idDependencia : null;
     }else{
       this.dependenciaSeleccionada = '';
       this.dependenciasUsuario = [];

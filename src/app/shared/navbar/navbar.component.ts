@@ -3,7 +3,6 @@ import { AuthService } from '../../services/auth.service';
 import { DataService } from '../../services/data.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { LimitarStringPipe } from '../../pipes/limitar-string.pipe';
 
 @Component({
   standalone: true,
