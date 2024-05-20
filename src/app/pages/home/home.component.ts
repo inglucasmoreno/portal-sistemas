@@ -17,6 +17,7 @@ export default class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.authService.usuario);
     this.dataService.ubicacionActual = 'Dashboard - Inicio';
     gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
   }

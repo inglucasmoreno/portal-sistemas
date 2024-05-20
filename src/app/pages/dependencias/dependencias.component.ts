@@ -103,7 +103,7 @@ export default class DependenciasComponent {
   listarDependencias(): void {
     const parametros: any = {
       direccion: this.ordenar.direccion,
-      columna: this.ordenar.columna
+      columna: this.ordenar.columna,
     }
     this.dependenciasService.listarDependencias(parametros).subscribe({
       next: ({ dependencias }) => {

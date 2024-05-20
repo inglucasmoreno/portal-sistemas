@@ -65,7 +65,7 @@
     </li>
 
     <!-- Configuraciones -->
-    <li (click)="mostrarOcultarSeccion('configuraciones')" routerLinkActive="bg-secondaryColor rounded"
+    <li *ngIf="authService.usuario.role === 'ADMIN_ROLE'" (click)="mostrarOcultarSeccion('configuraciones')" routerLinkActive="bg-secondaryColor rounded"
       class="flex justify-between items-center outline-none cursor-pointer p-2">
       <div class="flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

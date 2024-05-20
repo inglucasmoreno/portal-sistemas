@@ -13,6 +13,8 @@ export interface Usuarios {
 
   telefono: string;
 
+  asignableSolicitud: boolean;
+
   UsuariosDependencias: any;
 
   password: string;

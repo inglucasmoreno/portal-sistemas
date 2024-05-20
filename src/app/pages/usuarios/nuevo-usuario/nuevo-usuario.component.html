@@ -10,12 +10,11 @@
       </button>
     </div>
     <div class="bg-white p-2 text-sm">
-      <ng-select [(ngModel)]="dependenciaSeleccionada" class="w-full p-2">
-        <ng-option value=''> Seleccionar dependencia </ng-option>
+      <ng-select placeholder="Seleccionar una dependencia" [(ngModel)]="dependenciaSeleccionada" class="w-full p-2">
         <ng-option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }} </ng-option>
       </ng-select>
       <button (click)="agregarDependencia()"
-        class="bg-secondaryColor p-2 rounded w-full text-white shadow mt-3 hover:opacity-90">
+        class="boton-crear mt-2 w-full">
         Asignar dependencia
       </button>
     </div>
@@ -27,7 +26,7 @@
   <div class="w-full lg:w-1/2 bg-white mr-2 shadow rounded border border-gray-400">
 
     <!-- Cuerpo de formulario -->
-    <form [formGroup]="usuarioForm" class="pb-2">
+    <form [formGroup]="usuarioForm" (keydown.enter)="$event.preventDefault()" class="pb-2">
       <div class="flex items-center p-2 bg-gray-800 border border-gray-800 rounded-t">
         <button routerLink="/dashboard/usuarios" class="p-2 text-white hover:text-secondaryColor">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -101,8 +100,8 @@
               <span class="text-red-500"> * </span> Rol
             </div>
             <div class="bg-white mb-1 mt-1 flex">
-              <select class="input-generico w-full" formControlName="role">
-                <option value="USER_ROLE"> Estandar </option>
+              <select (change)="cambiarRole()" class="input-generico w-full" formControlName="role">
+                <option value="USER_ROLE"> Empleado </option>
                 <option value="TECHNICAL_ROLE"> Técnico </option>
                 <option value="ADMIN_ROLE"> Administrador </option>
               </select>
@@ -110,7 +109,7 @@
           </div>
         </div>
         <div class="flex flex-col lg:flex-row mt-3">
-          <div class="w-full mx-2 flex-1">
+          <div class="w-1/2 mx-2 flex-1">
             <div class="font-semibold text-gray-600 text-sm">
               <span class="text-red-500"> * </span> Telefono
             </div>
@@ -120,21 +119,16 @@
               </p>
             </div>
           </div>
-        </div>
-        <!-- <div class="flex flex-col lg:flex-row mt-3">
-          <div class="w-full mx-2 flex-1">
+          <div class="w-1/2 mx-2 flex-1">
             <div class="font-semibold text-gray-600 text-sm">
-              <span *ngIf="usuarioForm.value.role === 'USER_ROLE'" class="text-red-500"> * </span> Dependencia
+              <span class="text-red-500"> * </span> Asignable a solicitud
             </div>
-            <div class="bg-white p-1">
-              <select formControlName="dependencia" class="input-generico p-2 w-full">
-                <option value=""> Seleccionar dependencia </option>
-                <option *ngFor="let dependencia of dependencias" [value]="dependencia.id"> {{ dependencia.nombre }}
-                </option>
-              </select>
-            </div>
+            <select formControlName="asignableSolicitud" class="input-generico w-full mt-1">
+              <option value="true"> Si </option>
+              <option value="false"> No </option>
+            </select>
           </div>
-        </div> -->
+        </div>
         <div class="flex flex-col lg:flex-row mt-2">
           <div class="w-full mx-2 flex-1">
             <div class="font-semibold mt-2 text-gray-600 text-sm">
@@ -219,20 +213,20 @@
     </div>
 
     <!-- Dependencias -->
-    <div class="mt-2 text-sm">
-      <div class="border border-gray-800 flex items-center justify-between">
-        <h1 class="bg-gray-800 text-white p-2 font-semibold text-center w-full"> Dependencias asignadas </h1>
-        <!-- <button *ngIf="dependenciasUsuario.length === 0" (click)="abrirDependencias()" title="Agregar dependencia"
-          class="p-2 bg-white hover:text-se rounded border border-gray-400 hover:text-secondaryColor">
+    <div class="mt-2">
+      <div class="border bg-gray-800 border-gray-800 flex p-2 items-center justify-between">
+        <h1 class="text-white w-full"> Dependencias asignadas </h1>
+        <button (click)="abrirDependencias()" title="Agregar dependencia"
+          class="bg-white hover:text-se rounded border p-2 border-gray-400 hover:text-secondaryColor">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-        </button> -->
+        </button>
       </div>
     </div>
 
-    <div>
+    <div class="max-h-96 overflow-y-auto">
       @for(dependencia of dependenciasUsuario; track dependencia.id ){
       <div class="border border-gray-400 border-t-0 p-2 text-sm flex items-center justify-between">
         <div class="flex items-center">
@@ -241,13 +235,21 @@
             {{ dependencia?.nombre }}
           </p>
         </div>
-        <button title="Eliminar dependencia" (click)="eliminarDependencia(dependencia?.id)"
-          class="p-2 bg-red-100 border border-red-400 rounded">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
-        </button>
+        <div class="flex items-center">
+          <button [ngClass]="{'bg-yellow-100 border-yellow-400':dependencia.soloLectura}" title="Solo lectura" (click)="soloLectura(dependencia)" class="p-2 bg-gray-100 border border-gray-400 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+          </button>
+          <button title="Eliminar dependencia" (click)="eliminarDependencia(dependencia)"
+            class="p-2 bg-red-100 border ml-2 border-red-400 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
       }@empty {
       <div class="italic text-sm bg-gray-100 border border-gray-300 text-center p-2 mt-2 text-gray-600">

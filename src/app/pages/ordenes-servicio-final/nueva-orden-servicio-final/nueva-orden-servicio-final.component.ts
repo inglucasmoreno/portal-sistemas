@@ -10,6 +10,7 @@ import { UsuariosService } from '../../../services/usuarios.service';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { OrdenesServicioHistorialService } from '../../../services/ordenes-servicio-historial.service';
 import { NgSelectModule } from '@ng-select/ng-select';
+import gsap from 'gsap';
 
 @Component({
   standalone: true,
@@ -23,6 +24,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
   ],
 })
 export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterViewInit {
+
+  // Dependencias
+  public dependenciaSeleccionada: string = '';
+  public dependenciasUsuario: any[] = [];
 
   // Flags
   public solicitudEnviada: boolean = false;
@@ -61,10 +66,11 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     private ordenesServicio: OrdenesServicioService,
     private ordenesServicioHistorial: OrdenesServicioHistorialService,
     private usuariosService: UsuariosService,
-    private tiposOrdenServicioService: TiposOrdenServicioService
+    private tiposOrdenServicioService: TiposOrdenServicioService,
   ) { }
 
   ngOnInit() {
+    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
     this.dataService.ubicacionActual = "Dashboard - Nueva solicitud";
 
     this.alertService.loading();
@@ -72,8 +78,28 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     this.authService.usuario.role === 'USER_ROLE' ?
     this.solicitudForm.telefonoContacto = this.authService.usuario.telefono : null;
 
+    // Asignacion de dependencias
+    if(this.authService.usuario.role === 'USER_ROLE') {
+      this.dependenciasUsuario = [];
+      this.authService.usuario.dependencias.map((item) => {
+        if(!item.soloLectura){
+          this.dependenciasUsuario.push({
+            idDependencia: item.idDependencia,
+            idRelacion: item.idRelacion,
+            nombre: item.nombre
+          });
+        }
+      })
+      this.dependenciasUsuario.length > 0 ? this.dependenciaSeleccionada = this.authService.usuario.dependencias[0].idDependencia : null;
+    }else{
+      this.dependenciaSeleccionada = '';
+      this.dependenciasUsuario = [];
+    }
+
     // Listar tipos de solicitudes
-    this.tiposOrdenServicioService.listarTipos({}).subscribe({
+    this.tiposOrdenServicioService.listarTipos({
+      activo: 'true',
+    }).subscribe({
       next: ({ tipos }) => {
         this.tiposOrdenServicio = tipos;
         this.alertService.close();
@@ -117,10 +143,26 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
   }
 
   seleccionarUsuario(usuario: any): void {
+
     this.filtroUsuarios.parametro = '';
     this.usuarioSeleccionado = usuario;
     this.solicitudForm.telefonoContacto = usuario.telefono;
+    this.dependenciasUsuario = [];
+
+    usuario.UsuariosDependencias.map((item) => {
+      if(!item.soloLectura){
+        this.dependenciasUsuario.push({
+          idDependencia: item.dependencia.id,
+          idRelacion: item.id,
+          nombre: item.dependencia.nombre
+        });
+      }
+    })
+
+    this.dependenciasUsuario.length > 0 ? this.dependenciaSeleccionada = this.dependenciasUsuario[0].idDependencia : null;
+
     this.usuarios = [];
+
   }
 
   eliminarUsuario(): void {
@@ -129,9 +171,8 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
   }
 
   generarSolicitud(): void {
-    
+
     const {
-      usuarioId,
       tipoOrdenServicioId,
       telefonoContacto,
       observacionSolicitud,
@@ -139,7 +180,12 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
     } = this.solicitudForm;
 
     // Verificaciones
-    
+
+    if (!this.dependenciaSeleccionada) {
+      this.alertService.info('Debe seleccionar una dependencia');
+      return;
+    }
+
     if (!this.usuarioSeleccionado && this.authService.usuario.role !== 'USER_ROLE') {
       this.alertService.info('Debe seleccionar un usuario');
       return;
@@ -160,22 +206,17 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
       return;
     }
 
+
     this.alertService.loading();
-
-    let dependenciaId = null;
-
-    this.authService.usuario.role === 'ADMIN_ROLE' ? 
-      dependenciaId = this.usuarioSeleccionado.UsuariosDependencias[0].dependencia.id : 
-      dependenciaId = this.authService.usuario.dependencia.id;
 
     const data = {
       usuarioId: this.authService.usuario.role === 'USER_ROLE' ? this.authService.usuario.userId : this.usuarioSeleccionado.id,
       tipoOrdenServicioId: Number(tipoOrdenServicioId),
       telefonoContacto,
-      dependenciaId,
+      dependenciaId: Number(this.dependenciaSeleccionada),
       creatorUserId,
       observacionSolicitud
-    }; 
+    };
 
     this.ordenesServicio.nuevaOrden(data).subscribe({
       next: ({ orden }) => {
@@ -192,15 +233,15 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
             this.solicitudEnviada = true;
             this.solicitudForm = {
               usuarioId: '',
+              telefonoContacto: this.authService.usuario.telefono,
               tipoOrdenServicioId: '',
-              telefonoContacto: '',
               creatorUserId: this.authService.usuario.userId,
               observacionSolicitud: ''
             }
             this.alertService.close();
           }, error: ({ error }) => this.alertService.errorApi(error.message)
         })
-        
+
       }, error: ({error}) => this.alertService.errorApi(error.message)
     });
 

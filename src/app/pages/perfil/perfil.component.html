@@ -1,7 +1,9 @@
 <div class="p-4 gsap-contenido w-full max-w-5xl mx-auto md:flex">
-  <div class="border border-gray-400 w-full md:w-1/2 shadow rounded">
 
-    <h1 class="text-xl p-2 bg-gray-800 border border-gray-800 text-white text-center rounded-t"> Datos de usuario </h1>
+  <!-- Datos de usuario -->
+  <div class="border border-gray-400 w-full h-full md:w-1/2 shadow rounded">
+
+    <h1 class="text-lg p-2 bg-gray-800 border border-gray-800 text-white text-center rounded-t"> Datos de usuario </h1>
 
     <div *ngIf="usuarioLogin" class="p-4">
 
@@ -51,50 +53,68 @@
           <p class="font-semibold text-xl"> Fecha de ingreso </p>
           <p class="text-gray-500"> {{ usuarioLogin.createdAt | fecha }} </p>
         </div>
-        <div *ngIf="authService.usuario?.dependencia?.nombre" class="p-2 text-center mt-1">
-          <p class="font-semibold text-xl"> Dependencia </p>
-          <p class="text-gray-500 mt-2"> {{ authService.usuario?.dependencia?.nombre }} </p>
-        </div>
       </div>
 
     </div>
   </div>
-  <div class="w-full text-sm mt-2 md:mt-0 md:w-1/2 md:ml-2 border border-gray-400 shadow rounded h-full">
-    <h1 class="bg-gray-800 border border-gray-800 text-white text-center text-xl rounded-t p-2"> Actualizar contraseña
-    </h1>
-    <form [formGroup]="passwordForm" (submit)="actualizarPassword()" class="p-2">
-      <div>
-        <p class="font-semibold ml-1"> Contraseña actual </p>
-        <input formControlName="password_actual" autocomplete="false" type="password" placeholder="Mi contraseña actual"
-          class="input-generico w-full mt-1">
-        <p *ngIf="password_actual.touched && password_actual?.errors?.['required']" class="text-error mt-1"> La
-          contraseña es obligatoria </p>
-        <p *ngIf="password_actual.touched && password_actual?.errors?.['minlength']" class="text-error mt-1"> Debe tener
-          como minimo {{ password_actual?.errors?.['minlength'].requiredLength }} caracteres </p>
+
+  <!-- Password -->
+  <div class="w-full h-full md:mt-0 md:w-1/2 md:ml-2 mt-2">
+    <div class=" text-sm border border-gray-400 shadow rounded">
+      <h1 class="bg-gray-800 border border-gray-800 text-white text-center text-lg rounded-t p-2"> Actualizar contraseña
+      </h1>
+      <form [formGroup]="passwordForm" (submit)="actualizarPassword()" class="p-2">
+        <div>
+          <p class="font-semibold ml-1"> Contraseña actual </p>
+          <input formControlName="password_actual" autocomplete="false" type="password" placeholder="Mi contraseña actual"
+            class="input-generico w-full mt-1">
+          <p *ngIf="password_actual.touched && password_actual?.errors?.['required']" class="text-error mt-1"> La
+            contraseña es obligatoria </p>
+          <p *ngIf="password_actual.touched && password_actual?.errors?.['minlength']" class="text-error mt-1"> Debe tener
+            como minimo {{ password_actual?.errors?.['minlength'].requiredLength }} caracteres </p>
+        </div>
+        <div class="mt-2">
+          <p class="font-semibold ml-1"> Nueva contraseña </p>
+          <input formControlName="password_nuevo" autocomplete="false" type="password"
+            placeholder="Ingresar nueva contraseña" class="input-generico w-full mt-1">
+          <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['required']" class="text-error mt-1"> La
+            contraseña es obligatoria </p>
+          <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['minlength']" class="text-error mt-1"> Debe tener
+            como minimo {{ password_nuevo?.errors?.['minlength'].requiredLength }} caracteres </p>
+        </div>
+        <div class="mt-2 mb-2">
+          <p class="font-semibold ml-1"> Repetir contraseña </p>
+          <input formControlName="password_nuevo_repetir" autocomplete="false" type="password"
+            placeholder="Repite la nueva contraseña" class="input-generico w-full mt-1">
+          <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['required']"
+            class="text-error mt-1"> La
+            contraseña es obligatoria </p>
+          <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['minlength']"
+            class="text-error mt-1"> Debe tener
+            como minimo {{ password_nuevo_repetir?.errors?.['minlength'].requiredLength }} caracteres </p>
+        </div>
+        <button (click)="actualizarPassword()" class="boton-editar my-2 w-full">
+          Actualizar contraseña
+        </button>
+      </form>
+    </div>
+    <div class="w-full border border-gray-400 rounded-t mt-2">
+      <h1 class="bg-gray-800 border border-gray-800 text-white text-center text-lg rounded-t p-2"> Dependencias asignadas
+      </h1>
+      <div class="max-h-96 overflow-y-auto text-sm">
+        <div *ngFor="let item of usuarioLogin?.UsuariosDependencias" class="flex items-center justify-between p-2 border-b border-gray-300">
+          <div class="flex items-center">
+            <img class="w-10" src="assets/svg/dependencia.svg" alt="dependencia.svg">
+            <p class="ml-2"> {{ item.dependencia.nombre }} </p>
+          </div>
+          <div [ngClass]="{'bg-yellow-100 border-yellow-400':item.soloLectura}" class="p-2 border bg-gray-100 border-gray-400 rounded">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="mt-2">
-        <p class="font-semibold ml-1"> Nueva contraseña </p>
-        <input formControlName="password_nuevo" autocomplete="false" type="password"
-          placeholder="Ingresar nueva contraseña" class="input-generico w-full mt-1">
-        <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['required']" class="text-error mt-1"> La
-          contraseña es obligatoria </p>
-        <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['minlength']" class="text-error mt-1"> Debe tener
-          como minimo {{ password_nuevo?.errors?.['minlength'].requiredLength }} caracteres </p>
-      </div>
-      <div class="mt-2 mb-2">
-        <p class="font-semibold ml-1"> Repetir contraseña </p>
-        <input formControlName="password_nuevo_repetir" autocomplete="false" type="password"
-          placeholder="Repite la nueva contraseña" class="input-generico w-full mt-1">
-        <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['required']"
-          class="text-error mt-1"> La
-          contraseña es obligatoria </p>
-        <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['minlength']"
-          class="text-error mt-1"> Debe tener
-          como minimo {{ password_nuevo_repetir?.errors?.['minlength'].requiredLength }} caracteres </p>
-      </div>
-      <button (click)="actualizarPassword()" class="boton-editar my-2 w-full">
-        Actualizar contraseña
-      </button>
-    </form>
+    </div>
   </div>
 </div>

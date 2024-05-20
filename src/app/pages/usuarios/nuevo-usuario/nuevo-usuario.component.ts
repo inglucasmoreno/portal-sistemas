@@ -31,7 +31,7 @@ export default class NuevoUsuarioComponent implements OnInit {
   public showDependencias: boolean = false;
   public dependenciasUsuario: any[] = [];
   public dependencias: any[] = [];
-  public dependenciaSeleccionada: string = '';
+  public dependenciaSeleccionada: string = null;
 
   get usuario() {
     return this.usuarioForm.get('usuario');
@@ -93,6 +93,7 @@ export default class NuevoUsuarioComponent implements OnInit {
       apellido: ['', Validators.required],
       nombre: ['', Validators.required],
       telefono: ['', Validators.required],
+      asignableSolicitud: ['false'],
       dni: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]],
@@ -101,7 +102,9 @@ export default class NuevoUsuarioComponent implements OnInit {
     });
 
     this.alertService.loading();
-    this.dependenciasService.listarDependencias({}).subscribe({
+    this.dependenciasService.listarDependencias({
+      activo: 'true'
+    }).subscribe({
       next: ({ dependencias }) => {
         this.dependencias = dependencias;
         this.alertService.close();
@@ -127,12 +130,24 @@ export default class NuevoUsuarioComponent implements OnInit {
       return;
     }
 
+    // Se genera la DATA de dependencias
+    let dependencias = [];
+    this.dependenciasUsuario.forEach(dep => {
+      dependencias.push({
+        id: dep.id,
+        soloLectura: dep.soloLectura
+      });
+    });
+
     // Generamos el DATA - USUARIO
     const dataUsuario = {
       ...this.usuarioForm.value,
-      dependencias: this.usuarioForm.value !== 'ADMIN_ROLE' ? this.dependenciasUsuario.map(dep => dep.id) : [],
+      dependencias: this.usuarioForm.value !== 'ADMIN_ROLE' ? dependencias : [],
       creatorUserId: this.authService.usuario.userId
     };
+
+    // Adaptando Booleans
+    dataUsuario.asignableSolicitud = dataUsuario.asignableSolicitud === 'true' ? true : false;
 
     delete dataUsuario.repetir;
 
@@ -155,8 +170,11 @@ export default class NuevoUsuarioComponent implements OnInit {
   // Modal: Dependencias
   abrirDependencias(): void {
     this.alertService.loading();
-    this.dependenciasService.listarDependencias({}).subscribe({
-      next: ({ dependencias }) => {
+    this.dependenciasService.listarDependencias({
+      activo: 'true'
+    }).subscribe({
+      next: () => {
+        this.dependenciaSeleccionada = null;
         this.showDependencias = true;
         this.alertService.close();
       }, error: () => this.alertService.errorApi('Error al cargar dependencias')
@@ -166,8 +184,8 @@ export default class NuevoUsuarioComponent implements OnInit {
   // Agregar dependencia
   agregarDependencia(): void {
 
-    // Verificacion: Dependencia seleccionada 
-    if (this.dependenciaSeleccionada === '') {
+    // Verificacion: Dependencia seleccionada
+    if (!this.dependenciaSeleccionada) {
       this.alertService.info('Debe seleccionar una dependencia');
       return;
     }
@@ -179,17 +197,28 @@ export default class NuevoUsuarioComponent implements OnInit {
       return;
     }
 
-    const dependencia = this.dependencias.find(dep => dep.id == this.dependenciaSeleccionada);
-    this.dependenciasUsuario.push(dependencia);
-    this.dependenciaSeleccionada = '';
-    this.showDependencias = false;
+    const dependencia = this.dependencias.find(item => item.id == this.dependenciaSeleccionada);
+    this.dependenciasUsuario.push({...dependencia, soloLectura: false});
+    this.dependenciaSeleccionada = null;
+    this.dependencias = this.dependencias.filter(item => item.id != dependencia.id);
+    this.dependenciasUsuario.sort((a, b) => a.nombre > b.nombre ? 1 : -1);
 
+  }
+
+  // Activar/Desactivar solo lectura
+  soloLectura(dependencia): void {
+    dependencia.soloLectura = !dependencia.soloLectura;
   }
 
   // Eliminar dependencia
   eliminarDependencia(dependencia: any): void {
-    this.dependenciasUsuario = this.dependenciasUsuario.filter(dep => dep.id != dependencia);
+    this.dependencias.push(dependencia);
+    this.dependenciasUsuario = this.dependenciasUsuario.filter(item => item.id != dependencia.id);
+    this.dependencias.sort((a, b) => a.nombre > b.nombre ? 1 : -1);
   }
 
+  cambiarRole(): void {
+    this.usuarioForm.value.role === 'TECHNICAL_ROLE' ? this.usuarioForm.patchValue({ asignableSolicitud: 'true' }) : this.usuarioForm.patchValue({ asignableSolicitud: 'false' });
+  }
 
 }

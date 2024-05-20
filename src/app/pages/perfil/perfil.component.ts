@@ -64,8 +64,9 @@ export default class PerfilComponent implements OnInit {
     this.alertService.loading();
     this.usuariosService.getUsuario(this.authService.usuario.userId).subscribe({
       next: (usuario: any) => {
-        this.alertService.close();
+        console.log(usuario);
         this.usuarioLogin = usuario;
+        this.alertService.close();
       },
       error: ({ error }) => {
         this.alertService.errorApi(error.msg);

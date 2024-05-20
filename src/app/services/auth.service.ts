@@ -47,12 +47,20 @@ export class AuthService {
       headers: { Authorization: token }
     }).pipe(
       map((resp: any) => {
-        const { userId, usuario, apellido, nombre, role, telefono, dependencias } = resp.usuario;
-        const dependencia = {
-          id: dependencias[0].dependencia?.id,
-          nombre: dependencias[0]?.dependencia?.nombre,
-        }
-        this.usuario = new UsuarioOnline(userId, usuario, nombre, apellido, telefono, dependencia, role) ;
+        const { userId, usuario, apellido, nombre, role, telefono } = resp.usuario;
+
+        const dependencias = [];
+
+        resp.usuario.dependencias.map( (dependencia: any) => {
+          dependencias.push({
+            idDependencia: dependencia.dependencia?.id,
+            nombre: dependencia?.dependencia?.nombre,
+            idRelacion: dependencia.id,
+            soloLectura: dependencia.soloLectura
+          });
+        })
+
+        this.usuario = new UsuarioOnline(userId, usuario, nombre, apellido, telefono, dependencias, role) ;
         localStorage.setItem('token', resp.token);
         return true;
       }),

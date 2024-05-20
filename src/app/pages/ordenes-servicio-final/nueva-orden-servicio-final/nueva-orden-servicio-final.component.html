@@ -10,7 +10,7 @@
 </div>
 
 
-<div [ngClass]="{'hidden':solicitudEnviada}" class="w-1/2 mx-auto p-2 mt-4">
+<div [ngClass]="{'hidden':solicitudEnviada}" class="w-11/12 md:w-1/2 gsap-contenido mx-auto p-2 mt-4">
 
   <!-- Encabezado -->
   <h1 class="text-3xl text-center font-semibold"> Solicitud de asistencia </h1>
@@ -27,8 +27,9 @@
     <div>
 
       <!-- Busqueda de usuarios -->
-      <div class="flex items-center">
-        <p *ngIf="authService.usuario.role !== 'USER_ROLE'" class="font-semibold mt-6"> <span class="text-red-500"> * </span>
+      <div class="flex items-center mt-6">
+        <p *ngIf="authService.usuario.role !== 'USER_ROLE'" class="font-semibold"> <span class="text-red-500"> *
+          </span>
           Usuario solicitante </p>
         <span *ngIf="buscandoUsuarios" class="text-primaryColor ml-2 animate-spin">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -79,8 +80,8 @@
             <div class="ml-3">
               <p class="font-semibold"> {{ usuarioSeleccionado.apellido }} {{ usuarioSeleccionado.nombre }} </p>
               <p class="text-xs text-gray-600"> DNI {{ usuarioSeleccionado.dni }} </p>
-              <p class="text-xs text-gray-700"> {{ usuarioSeleccionado.UsuariosDependencias[0] ?
-                usuarioSeleccionado.UsuariosDependencias[0].dependencia.nombre : 'Sin dependencia' }} </p>
+              <!-- <p class="text-xs text-gray-700"> {{ usuarioSeleccionado.UsuariosDependencias[0] ?
+                usuarioSeleccionado.UsuariosDependencias[0].dependencia.nombre : 'Sin dependencia' }} </p> -->
             </div>
           </div>
           <button title="Eliminar usuario" (click)="eliminarUsuario()"
@@ -94,24 +95,30 @@
       </div>
 
     </div>
-    <div class="mt-6">
+    <div *ngIf="usuarioSeleccionado || authService.usuario.role === 'USER_ROLE'" class="mt-4">
+      <p class="font-semibold"> <span class="text-red-700"> * </span> Dependencia </p>
+      <select [(ngModel)]="dependenciaSeleccionada" [disabled]="dependenciasUsuario.length <= 1" class="input-generico w-full mt-2">
+        <option *ngFor="let item of dependenciasUsuario" [value]="item.idDependencia"> {{ item.nombre }} </option>
+      </select>
+    </div>
+    <div class="mt-4">
       <p class="font-semibold"> <span class="text-red-700"> * </span> Telefono de contacto </p>
       <input type="text" [(ngModel)]="solicitudForm.telefonoContacto" placeholder="Ej. 2664869642"
         class="input-generico w-full mt-2">
     </div>
-    <div class="mt-6">
+    <div class="mt-4">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Tipo de solicitud </p>
       <select [(ngModel)]="solicitudForm.tipoOrdenServicioId" class="input-generico w-full mt-2">
         <option value=""> Seleccionar tipo </option>
         <option *ngFor="let tipo of tiposOrdenServicio" [value]="tipo.id"> {{ tipo.descripcion }} </option>
       </select>
     </div>
-    <div class="mt-6">
+    <div class="mt-4">
       <p class="font-semibold"> <span class="text-red-500"> * </span> Detalles del problema </p>
       <textarea [(ngModel)]="solicitudForm.observacionSolicitud" class="input-generico w-full mt-2"
         placeholder="Debe detallar su problema aquí"></textarea>
     </div>
-    <button (click)="generarSolicitud()" class="w-full p-2 rounded bg-secondaryColor mt-6 text-white hover:opacity-90">
+    <button (click)="generarSolicitud()" class="boton-crear mt-2 w-full">
       Solicitar asistencia
     </button>
   </div>

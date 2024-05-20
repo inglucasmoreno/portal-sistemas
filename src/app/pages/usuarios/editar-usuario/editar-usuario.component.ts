@@ -11,6 +11,7 @@ import { DependenciasService } from '../../../services/dependencias.service';
 import { AuthService } from '../../../services/auth.service';
 import { ModalComponent } from '../../../components/modal/modal.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { UsuariosDependenciasService } from '../../../services/usuarios-dependencias.service';
 
 @Component({
   standalone: true,
@@ -72,13 +73,14 @@ export default class EditarUsuarioComponent implements OnInit {
   public showDependencias: boolean = false;
   public dependencias: any[] = [];
   public dependenciasUsuario: any[] = [];
-  public dependenciaSeleccionada: string = '';
+  public dependenciaSeleccionada: string = null;
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private dependenciasService: DependenciasService,
+    private usuariosDependenciasService: UsuariosDependenciasService,
     private usuariosService: UsuariosService,
     private alertService: AlertService,
     private dataService: DataService,
@@ -97,15 +99,17 @@ export default class EditarUsuarioComponent implements OnInit {
       apellido: ['', Validators.required],
       nombre: ['', Validators.required],
       telefono: ['', Validators.required],
+      asignableSolicitud: ['false'],
       dni: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      dependencia: [''],
       role: ['USER_ROLE', [Validators.required, Validators.minLength(4)]],
       activo: ['true', Validators.required],
     });
 
     this.alertService.loading();
-    this.dependenciasService.listarDependencias({}).subscribe({
+    this.dependenciasService.listarDependencias({
+      activo: 'true'
+    }).subscribe({
       next: ({ dependencias }) => {
         this.dependencias = dependencias;
         this.getUsuario(); // Datos iniciales de usuarios
@@ -124,7 +128,18 @@ export default class EditarUsuarioComponent implements OnInit {
       next: (usuarioRes) => {
 
         this.usuario = usuarioRes;
-        const { usuario, apellido, nombre, telefono, dni, email, role, UsuariosDependencias, activo } = this.usuario;
+        const {
+          usuario,
+          apellido,
+          nombre,
+          telefono,
+          asignableSolicitud,
+          dni,
+          email,
+          role,
+          UsuariosDependencias,
+          activo
+        } = this.usuario;
 
         this.usuarioForm.patchValue({
           usuario,
@@ -132,13 +147,13 @@ export default class EditarUsuarioComponent implements OnInit {
           nombre,
           dni,
           telefono,
-          dependencia: this.usuario?.UsuariosDependencias[0]?.dependencia?.id ? this.usuario?.UsuariosDependencias[0]?.dependencia?.id : "",
+          asignableSolicitud: asignableSolicitud ? 'true' : 'false',
           email,
           role,
           activo: String(activo)
         });
 
-        UsuariosDependencias.length > 0 ? this.dependenciasUsuario.push(UsuariosDependencias[0]?.dependencia) : null;
+        this.dependenciasUsuario = UsuariosDependencias
 
         this.alertService.close();
 
@@ -152,19 +167,14 @@ export default class EditarUsuarioComponent implements OnInit {
 
     if (this.usuarioForm.valid) {
 
-      // Si el usuario no es administrador debe seleccionar una dependencia
-      if (this.usuarioForm.value.role !== 'ADMIN_ROLE' && this.dependenciasUsuario.length === 0) {
-        this.alertService.info('Debe seleccionar una dependencia');
-        return;
-      }
-
-      this.usuarioForm.value.dependencia = this.usuarioForm.value.dependencia === '' ? '' : Number(this.usuarioForm.value.dependencia);
-
       let data: any = {
         ...this.usuarioForm.value,
-        dependencias: this.usuarioForm.value !== 'ADMIN_ROLE' ? this.dependenciasUsuario.map(dep => dep.id) : [],
         creatorUserId: this.authService.usuario.userId
       };
+
+      // Se adaptan los booleanos
+      data.asignableSolicitud = data.asignableSolicitud === 'true' ? true : false;
+      data.activo = data.activo === 'true' ? true : false;
 
       this.alertService.loading();
 
@@ -183,7 +193,9 @@ export default class EditarUsuarioComponent implements OnInit {
   // Modal: Dependencias
   abrirDependencias(): void {
     this.alertService.loading();
-    this.dependenciasService.listarDependencias({}).subscribe({
+    this.dependenciasService.listarDependencias({
+      activo: 'true'
+    }).subscribe({
       next: ({ dependencias }) => {
         this.showDependencias = true;
         this.alertService.close();
@@ -194,29 +206,63 @@ export default class EditarUsuarioComponent implements OnInit {
   // Agregar dependencia
   agregarDependencia(): void {
 
-    // Verificacion: Dependencia seleccionada 
+    // Verificacion: Dependencia seleccionada
     if (this.dependenciaSeleccionada === '') {
       this.alertService.info('Debe seleccionar una dependencia');
       return;
     }
 
-    // Verificacion: Dependencia repetida
-    const dependenciaRepetida = this.dependenciasUsuario.find(dep => dep.id == this.dependenciaSeleccionada);
-    if (dependenciaRepetida) {
-      this.alertService.info('La dependencia ya fue asignada');
-      return;
-    }
+    this.alertService.loading();
 
-    const dependencia = this.dependencias.find(dep => dep.id == this.dependenciaSeleccionada);
-    this.dependenciasUsuario.push(dependencia);
-    this.dependenciaSeleccionada = '';
+    const data = {
+      usuarioId: Number(this.id),
+      dependenciaId: this.dependenciaSeleccionada,
+      creatorUserId: this.authService.usuario.userId
+    };
+
+    this.usuariosDependenciasService.nuevaRelacion(data).subscribe({
+      next: ({ relacion }) => {
+        this.dependenciasUsuario.push(relacion);
+        this.alertService.close();
+      },
+      error: ({ error }) => this.alertService.errorApi(error.message)
+    })
+
+    this.dependenciaSeleccionada = null;
     this.showDependencias = false;
 
   }
 
   // Eliminar dependencia
-  eliminarDependencia(dependencia: any): void {
-    this.dependenciasUsuario = this.dependenciasUsuario.filter(dep => dep.id != dependencia);
+  eliminarDependencia(relacion: any): void {
+
+    if(this.dependenciasUsuario.length === 1) {
+      this.alertService.info('El usuario debe tener al menos una dependencia asignada');
+      return;
+    }
+
+    this.alertService.loading();
+    this.usuariosDependenciasService.eliminarRelacion(relacion.id).subscribe({
+      next: ({ relacion }) => {
+        this.dependenciasUsuario = this.dependenciasUsuario.filter(item => item.id !== relacion.id);
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    });
+
+  }
+
+  actualizarSoloLectura(relacionFront: any): void {
+    this.alertService.loading();
+    this.usuariosDependenciasService.actualizarRelacion(relacionFront.id, { soloLectura: !relacionFront.soloLectura }).subscribe({
+      next: ({ relacion }) => {
+
+        // Actualizar solo lectura en el front
+        const relacionIndex = this.dependenciasUsuario.findIndex(item => item.id === relacion.id);
+        this.dependenciasUsuario[relacionIndex].soloLectura = relacion.soloLectura;
+
+        this.alertService.close();
+      }, error: ({ error }) => this.alertService.errorApi(error.message)
+    })
   }
 
   // Funcion del boton regresar
