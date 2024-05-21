@@ -13,6 +13,8 @@ import { AuthService } from '../../../services/auth.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { OrdenesServicioToTecnicosService } from '../../../services/ordenes-servicio-to-tecnicos.service';
+import { formatDistance } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 @Component({
   standalone: true,
@@ -31,6 +33,9 @@ import { OrdenesServicioToTecnicosService } from '../../../services/ordenes-serv
   ]
 })
 export default class DetallesOrdenServicioFinalComponent implements OnInit {
+
+  // Tiempos
+  public demoraSolucion: string = '';
 
   // Flags
   public showSeccion: string = 'Detalles';      // Detalles | Historial
@@ -73,14 +78,25 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
     })
   }
 
+  calculoDemoraSolucion(): void {
+    const fechaCierre = new Date(this.orden.fechaCierre);
+    const fechaInicio = new Date(this.orden.createdAt);
+    this.demoraSolucion = formatDistance(fechaCierre, fechaInicio, { locale: es });
+    console.log(this.demoraSolucion);
+  }
+
   obtenerSolicitud(): void {
     this.alertService.loading()
     this.ordenesServicio.getOrden(this.idSolicitud).subscribe({
       next: ({ orden }) => {
         this.orden = orden;
         this.historialOrden = this.orden.ordenesServicioHistorial;
-        console.log(this.historialOrden);
-        this.tecnicosAsignados = orden.ordenesServicioTecnico;
+        this.calculoDemoraSolucion();
+        this.tecnicosAsignados = [];
+        orden.ordenesServicioTecnico.map(item => {
+          item.activo ? this.tecnicosAsignados.push(item?.tecnico) : null;
+        })
+        console.log(this.tecnicosAsignados);
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })
@@ -149,6 +165,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
             motivoRechazo: '',
             ordenServicioId: this.orden.id,
             creatorUserId: this.authService.usuario.userId,
+            activo: true
           }
 
           // Actualizacion de historial
@@ -180,7 +197,13 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
     this.tecnicoSeleccionado = '';
     this.tecnicosParaAsignar = [];
     this.alertService.loading();
-    this.usuariosService.listarUsuarios().subscribe({
+    this.usuariosService.listarUsuarios(
+      1,
+      'apellido',
+      'true',
+      'true',
+      ''
+    ).subscribe({
       next: ({ usuarios }) => {
         this.tecnicos = usuarios;
         this.showModalAsignacion = true;
@@ -208,13 +231,14 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
 
   asignarTecnicos(): void {
 
-    if(this.tecnicosParaAsignar.length === 0) {
+    if (this.tecnicosParaAsignar.length === 0) {
       this.alertService.info('Debes seleccionar al menos un técnico');
       return;
     }
 
     const data = {
       tecnicos: [],
+      fechaEnProceso: new Date().toISOString(),
       ordenServicioId: this.idSolicitud,
       creatorUserId: this.authService.usuario.userId
     };
@@ -234,6 +258,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
                 ordenServicioId: this.orden.id,
                 creatorUserId: this.authService.usuario.userId,
               }
+
               // Actualizacion de historial
               this.ordenesServicioHistorialService.nuevaRelacion(dataHistorial).subscribe({
                 next: () => {
@@ -246,7 +271,39 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
           })
         }
       });
+  }
 
+  completarSolicitud(): void {
+    this.alertService.question({ msg: '¿Quieres completar la solicitud?', buttonText: 'Aceptar' })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          this.alertService.loading();
+          const data = {
+            fechaCierre: new Date().toISOString(),
+            estadoOrden: 'Completada',
+            activo: false
+          };
+          this.ordenesServicio.actualizarOrden(this.idSolicitud, data).subscribe({
+            next: () => {
+
+              const dataHistorial = {
+                tipo: 'Completada',
+                ordenServicioId: this.orden.id,
+                creatorUserId: this.authService.usuario.userId,
+              }
+
+              // Actualizacion de historial
+              this.ordenesServicioHistorialService.nuevaRelacion(dataHistorial).subscribe({
+                next: () => {
+                  this.alertService.close();
+                  this.router.navigateByUrl('/dashboard/ordenesServicio');
+                }, error: ({ error }) => this.alertService.errorApi(error.message)
+              });
+
+            }, error: ({ error }) => this.alertService.errorApi(error.message)
+          })
+        }
+      });
   }
 
   cambiarSeccion(seccion: string): void {

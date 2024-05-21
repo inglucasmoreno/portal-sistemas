@@ -133,7 +133,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
 
     this.usuarios = [];
 
-    this.usuariosService.listarUsuarios(1, 'apellido', '', this.filtroUsuarios.parametro).subscribe({
+    this.usuariosService.listarUsuarios(1, 'apellido', '', '', this.filtroUsuarios.parametro).subscribe({
       next: ({ usuarios }) => {
         this.usuarios = usuarios;
         this.buscandoUsuarios = false;

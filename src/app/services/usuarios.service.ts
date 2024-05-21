@@ -26,7 +26,8 @@ export class UsuariosService {
   // Listar usuarios
   listarUsuarios(
     direccion: number = 1, 
-    columna: string = 'apellido', 
+    columna: string = 'apellido',
+    asignableSolicitud: string = '',
     activo = '',
     parametro: string = ''  
   ): Observable<any> {
@@ -35,6 +36,7 @@ export class UsuariosService {
         direccion: String(direccion),
         columna,
         activo,
+        asignableSolicitud,
         parametro
       },
       headers: {
