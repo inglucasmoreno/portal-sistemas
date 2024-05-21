@@ -121,7 +121,7 @@
       <!-- Seccion: Detalles -->
       <div *ngIf="showSeccion === 'Detalles'">
         <div class="mt-4">
-          <p class="p-2"> <span class="font-semibold"> Tecnicos asignados: </span>
+          <p *ngIf="orden.estado === 'En proceso'" class="p-2"> <span class="font-semibold"> Tecnicos asignados: </span>
             <span class="text-xs py-1 px-2 bg-blue-100 border border-blue-300 ml-2 rounded"
               *ngFor="let elemento of tecnicosAsignados"> {{ elemento.tecnico.apellido }} {{ elemento.tecnico.nombre }}
             </span>
@@ -162,8 +162,8 @@
             </span> </p>
         </div>
       </div>
-      <div class="flex items-center mt-2">
-        <button *ngIf="showSeccion === 'Detalles' && orden?.estadoOrden !== 'Completada'" (click)="abrirRechazar()"
+      <div *ngIf="authService.usuario.role !== 'USER_ROLE'" class="flex items-center mt-2">
+        <button *ngIf="showSeccion === 'Detalles' && orden?.estadoOrden === 'Pendiente'" (click)="abrirRechazar()"
           class="boton-eliminar w-1/2">
           Rechazar
         </button>

@@ -55,7 +55,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private usuariosService: UsuariosService,
-    private authService: AuthService,
+    public authService: AuthService,
     private ordenesServicio: OrdenesServicioService,
     private activatedRoute: ActivatedRoute,
     private alertService: AlertService,
@@ -169,7 +169,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
                   this.alertService.close();
                 }, error: ({ error }) => this.alertService.errorApi(error.message)
               });
-              
+
             }, error: ({ error }) => this.alertService.errorApi(error.message)
           });
         }
@@ -207,7 +207,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
   }
 
   asignarTecnicos(): void {
-    
+
     if(this.tecnicosParaAsignar.length === 0) {
       this.alertService.info('Debes seleccionar al menos un técnico');
       return;
