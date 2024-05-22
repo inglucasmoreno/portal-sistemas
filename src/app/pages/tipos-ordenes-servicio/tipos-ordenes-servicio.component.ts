@@ -32,7 +32,7 @@ import AbmTipoOrdenServicioComponent from "./abm-tipo-orden-servicio/abm-tipo-or
 })
 export default class TiposOrdenServicioComponent {
 
-    // Paginacion
+  // Paginacion
   public paginaActual: number = 1;
   public cantidadItems: number = 10;
 

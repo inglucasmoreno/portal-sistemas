@@ -71,6 +71,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/usuarios/editar-password/editar-password.component'),
       },
 
+      // Mi bandeja
+
+      {
+        path: 'miBandeja',
+        title: 'Mi bandeja',
+        loadComponent: () => import('./pages/mi-bandeja/mi-bandeja.component'),
+      },
+
       // Dependencias
 
       {

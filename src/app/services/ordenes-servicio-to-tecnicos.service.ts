@@ -22,11 +22,17 @@ export class OrdenesServicioToTecnicosService {
     })
   }
 
-  listarOrdenesTecnicos({ direccion = 'asc', columna = 'id', activo = '' }): Observable<any> {
+  listarOrdenesTecnicos({ 
+    direccion = 'asc', 
+    columna = 'id', 
+    tecnico = '',
+    activo = '' 
+  }): Observable<any> {
     return this.http.get(urlApi, {
       params: {
         direccion: String(direccion),
         columna,
+        tecnico,
         activo
       },
       headers: this.getToken
