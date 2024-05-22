@@ -13,6 +13,8 @@ import { DataService } from '../../services/data.service';
 import { AlertService } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
 import { OrdenesServicioToTecnicosService } from '../../services/ordenes-servicio-to-tecnicos.service';
+import { FechaHoraPipe } from '../../pipes/fecha-hora.pipe';
+import { LimitarStringPipe } from '../../pipes/limitar-string.pipe';
 
 @Component({
   selector: 'app-mi-bandeja',
@@ -21,6 +23,8 @@ import { OrdenesServicioToTecnicosService } from '../../services/ordenes-servici
     CommonModule,
     FormsModule,
     FechaPipe,
+    FechaHoraPipe,
+    LimitarStringPipe,
     ModalComponent,
     NgxPaginationModule,
     RouterModule,
@@ -108,5 +112,5 @@ export default class MiBandejaComponent implements OnInit {
     this.paginaActual = nroPagina;
     this.listarOrdenes();
   }
-  
+
 }

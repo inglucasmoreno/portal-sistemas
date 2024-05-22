@@ -15,6 +15,7 @@ import { UsuariosService } from '../../../services/usuarios.service';
 import { OrdenesServicioToTecnicosService } from '../../../services/ordenes-servicio-to-tecnicos.service';
 import { formatDistance } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Location } from '@angular/common';
 
 @Component({
   standalone: true,
@@ -66,7 +67,8 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
     private alertService: AlertService,
     private ordenesServicioHistorialService: OrdenesServicioHistorialService,
     private ordenesServicioToTecnicosService: OrdenesServicioToTecnicosService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -76,6 +78,10 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
       this.idSolicitud = id;
       this.obtenerSolicitud();
     })
+  }
+
+  regresarRutaAnterior(): void {
+    this.location.back();
   }
 
   calculoDemoraSolucion(): void {
@@ -142,7 +148,8 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
               this.ordenesServicioHistorialService.nuevaRelacion(dataHistorial).subscribe({
                 next: () => {
                   this.alertService.close();
-                  this.router.navigateByUrl('/dashboard/ordenesServicio');
+                  // this.router.navigateByUrl('/dashboard/ordenesServicio');
+                  this.regresarRutaAnterior();
                 }, error: ({ error }) => this.alertService.errorApi(error.message)
               });
             }, error: ({ error }) => this.alertService.errorApi(error.message)
@@ -263,7 +270,8 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
               this.ordenesServicioHistorialService.nuevaRelacion(dataHistorial).subscribe({
                 next: () => {
                   this.alertService.close();
-                  this.router.navigateByUrl('/dashboard/ordenesServicio');
+                  // this.router.navigateByUrl('/dashboard/ordenesServicio');
+                  this.regresarRutaAnterior();
                 }, error: ({ error }) => this.alertService.errorApi(error.message)
               });
 
@@ -296,7 +304,8 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
               this.ordenesServicioHistorialService.nuevaRelacion(dataHistorial).subscribe({
                 next: () => {
                   this.alertService.close();
-                  this.router.navigateByUrl('/dashboard/ordenesServicio');
+                  // this.router.navigateByUrl('/dashboard/ordenesServicio');
+                  this.regresarRutaAnterior();
                 }, error: ({ error }) => this.alertService.errorApi(error.message)
               });
 

@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between bg-gray-800 px-4 py-3 rounded-t">
           <div class="ml-2 text-white">
             <h2 class="text-xl md:text-2xl leading-tight">
-              Listado de solicitudes
+              Mi Bandeja
             </h2>
             <p> Total de solicitudes: {{ relaciones.length }} </p>
           </div>
@@ -199,8 +199,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for(orden of ordenes | paginate: {itemsPerPage:
-                cantidadItems, currentPage: paginaActual}; track orden.id){
+                @for(orden of ordenes | paginate: {itemsPerPage:cantidadItems, currentPage: paginaActual}; track orden.id){
                 <tr class="animate__animated animate__fadeIn">
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                     <p class="text-gray-900 whitespace-no-wrap">
@@ -248,7 +247,7 @@
                 <tr class="p-4 text-white"> a </tr>
                 <tr class="w-full">
                   <td colspan="6" class="text-gray-500 text-sm p-2 border border-gray-300 text-center bg-gray-50 mt-4">
-                    No se encontraron ordenes </td>
+                    No se encontraron solicitudes </td>
                 </tr>
                 }
               </tbody>
