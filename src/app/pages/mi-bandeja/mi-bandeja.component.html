@@ -47,7 +47,7 @@
                   </path>
                 </svg>
               </span>
-              <input (change)="cambiarPagina(1)" placeholder="Buscar"
+              <input [(ngModel)]="filtro.parametro" (change)="cambiarPagina(1)" placeholder="Buscar"
                 class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
             </div>
             <select (change)="cambiarPagina(1)"
@@ -120,21 +120,21 @@
                   </th>
                   <th
                     class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                    <div (click)="ordenarPorColumna('dependencia')"
+                    <div (click)="ordenarPorColumna('ordenServicio.dependencia.nombre')"
                       class="cursor-pointer flex items-center focus:outline-none">
                       <span> Dependencia </span>
                       <span class="ml-2 text-gray-600">
-                        <svg *ngIf="ordenar.columna == 'dependencia' && ordenar.direccion == 'asc'" width="15" height="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicio.dependencia.nombre' && ordenar.direccion == 'asc'" width="15" height="15"
                           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-chevron-down">
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna == 'dependencia' && ordenar.direccion == 'desc'" width="15" height="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicio.dependencia.nombre' && ordenar.direccion == 'desc'" width="15" height="15"
                           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-chevron-up">
                           <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna != 'dependencia'" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        <svg *ngIf="ordenar.columna != 'ordenServicio.dependencia.nombre'" width="15" height="15" viewBox="0 0 24 24" fill="none"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                           class="feather feather-minus">
                           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -144,21 +144,21 @@
                   </th>
                   <th
                     class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
-                    <div (click)="ordenarPorColumna('tipoOrdenSerivios')"
+                    <div (click)="ordenarPorColumna('ordenServicio.tipoOrdenSericio.descripcion')"
                       class="cursor-pointer flex items-center focus:outline-none">
                       <span> Tipo </span>
                       <span class="ml-2 text-gray-600">
-                        <svg *ngIf="ordenar.columna == 'tipoOrdenSerivios' && ordenar.direccion == 'asc'" width="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicio.tipoOrdenServicio.descripcion' && ordenar.direccion == 'asc'" width="15"
                           height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna == 'tipoOrdenSerivios' && ordenar.direccion == 'desc'" width="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicio.tipoOrdenServicio.descripcion' && ordenar.direccion == 'desc'" width="15"
                           height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up">
                           <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna != 'tipoOrdenSerivios'" width="15" height="15" viewBox="0 0 24 24"
+                        <svg *ngIf="ordenar.columna != 'ordenServicio.tipoOrdenServicio.descripcion'" width="15" height="15" viewBox="0 0 24 24"
                           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-minus">
                           <line x1="5" y1="12" x2="19" y2="12"></line>

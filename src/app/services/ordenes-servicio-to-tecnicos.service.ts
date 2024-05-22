@@ -26,6 +26,7 @@ export class OrdenesServicioToTecnicosService {
     direccion = 'asc', 
     columna = 'id', 
     tecnico = '',
+    parametro = '',
     activo = '' 
   }): Observable<any> {
     return this.http.get(urlApi, {
@@ -33,6 +34,7 @@ export class OrdenesServicioToTecnicosService {
         direccion: String(direccion),
         columna,
         tecnico,
+        parametro,
         activo
       },
       headers: this.getToken

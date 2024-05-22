@@ -27,6 +27,7 @@ export class OrdenesServicioService {
     columna = 'createdAt',
     estado = '',
     dependencia = '',
+    parametro = '',
     pagina = 1,
     itemsPorPagina = 100000,
   }): Observable<any> {
@@ -35,7 +36,10 @@ export class OrdenesServicioService {
         direccion: String(direccion),
         columna,
         estado,
-        dependencia
+        parametro,
+        dependencia,
+        pagina,
+        itemsPorPagina
       },
       headers: this.getToken
     })

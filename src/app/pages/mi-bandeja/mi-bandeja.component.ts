@@ -74,14 +74,16 @@ export default class MiBandejaComponent implements OnInit {
   listarOrdenes(): void {
     this.alertService.loading();
     this.ordenesServicioToTecnicosService.listarOrdenesTecnicos({
+      columna: this.ordenar.columna,
+      direccion: this.ordenar.direccion,
       tecnico: this.authService.usuario.userId,
+      parametro: this.filtro.parametro,
       activo: "true"
     }).subscribe({
       next: ({ordenesToTecnicos}) => {
         this.relaciones = ordenesToTecnicos;
         this.ordenes = [];
         ordenesToTecnicos.map(({ordenServicio}) => { this.ordenes.push(ordenServicio); })
-        console.log(this.relaciones);
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })

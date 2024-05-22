@@ -83,6 +83,7 @@ export default class OrdenesServicioFinalComponent implements OnInit {
       columna: this.ordenar.columna,
       estado: this.filtro.estado,
       dependencia: this.authService.usuario.role === 'USER_ROLE' ? this.dependenciaSeleccionada : '',
+      parametro: this.filtro.parametro,
       pagina: this.paginaActual,
       itemsPorPagina: this.cantidadItems,
     }
