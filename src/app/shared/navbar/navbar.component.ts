@@ -19,7 +19,8 @@ export class NavbarComponent implements OnInit {
   public usuarioLogin: any = null;
 
   public showSeccion = {
-    configuraciones: false
+    configuraciones: false,
+    reportes: false
   }
 
   constructor(

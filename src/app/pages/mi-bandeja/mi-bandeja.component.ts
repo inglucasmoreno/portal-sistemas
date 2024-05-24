@@ -51,11 +51,11 @@ export default class MiBandejaComponent implements OnInit {
   // Ordenar
   public ordenar = {
     direccion: 'desc',  // Asc (1) | Desc (-1)
-    columna: 'createdAt'
+    columna: 'ordenServicioId'
   }
 
   // Paginacion
-  public totalItems: number;
+  public totalItems: number = 0;
   public paginaActual: number = 1;
   public cantidadItems: number = 10;
 
@@ -80,8 +80,10 @@ export default class MiBandejaComponent implements OnInit {
       parametro: this.filtro.parametro,
       activo: "true"
     }).subscribe({
-      next: ({ordenesToTecnicos}) => {
+      next: ({ordenesToTecnicos, totalItems}) => {
+        this.totalItems = totalItems;
         this.relaciones = ordenesToTecnicos;
+        console.log(this.relaciones);
         this.ordenes = [];
         ordenesToTecnicos.map(({ordenServicio}) => { this.ordenes.push(ordenServicio); })
         this.alertService.close();

@@ -8,7 +8,7 @@
             <h2 class="text-xl md:text-2xl leading-tight">
               Listado de solicitudes
             </h2>
-            <p> Total de solicitudes: {{ ordenes.length }} </p>
+            <p> Total de solicitudes: {{ totalItems }} </p>
           </div>
           <div>
             <button title="Nueva orden" routerLink="/dashboard/ordenServicio/nueva" class="boton-nuevo-header">
@@ -207,7 +207,7 @@
               </thead>
               <tbody>
                 @for(orden of ordenes | paginate: {itemsPerPage:
-                cantidadItems, currentPage: paginaActual}; track orden.id){
+                cantidadItems, currentPage: paginaActual, totalItems:totalItems}; track orden.id){
                 <tr class="animate__animated animate__fadeIn">
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                     <p class="text-gray-900 whitespace-no-wrap">

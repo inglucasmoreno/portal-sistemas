@@ -115,6 +115,15 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/ordenes-servicio-final/detalles-orden-servicio-final/detalles-orden-servicio-final.component'),
       },
 
+      // Reportes
+
+      {
+        path: 'reportes/solicitudes-asistencia',
+        title: 'Reporte - Solicitudes',
+        loadComponent: () => import('./pages/reportes/reportes-solicitudes/reportes-solicitudes.component'),
+      },
+
+
     ]
   },
 

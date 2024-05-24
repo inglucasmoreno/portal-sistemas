@@ -92,7 +92,6 @@ export default class OrdenesServicioFinalComponent implements OnInit {
       next: ({ ordenes, totalItems }) => {
         this.totalItems = totalItems;
         this.ordenes = ordenes;
-        console.log(this.ordenes);
         this.alertService.close();
       }, error: ({ error }) => this.alertService.errorApi(error.message)
     })

@@ -8,7 +8,7 @@
             <h2 class="text-xl md:text-2xl leading-tight">
               Mi Bandeja
             </h2>
-            <p> Total de solicitudes: {{ relaciones.length }} </p>
+            <p> Total de solicitudes: {{ totalItems }} </p>
           </div>
           <div>
             <button title="Nueva orden" routerLink="/dashboard/ordenServicio/nueva" class="boton-nuevo-header">
@@ -68,23 +68,23 @@
                 <tr class="border">
                   <th
                     class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                    <div (click)="ordenarPorColumna('id')"
+                    <div (click)="ordenarPorColumna('ordenServicioId')"
                       class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                       <span>
                         Numero
                       </span>
                       <span class="ml-2">
-                        <svg *ngIf="ordenar.columna == 'id' && ordenar.direccion == 'asc'" width="15" height="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicioId' && ordenar.direccion == 'asc'" width="15" height="15"
                           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-chevron-down">
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna == 'id' && ordenar.direccion == 'desc'" width="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicioId' && ordenar.direccion == 'desc'" width="15"
                           height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up">
                           <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna != 'id'" width="15" height="15" viewBox="0 0 24 24"
+                        <svg *ngIf="ordenar.columna != 'ordenServicioId'" width="15" height="15" viewBox="0 0 24 24"
                           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-minus">
                           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -94,23 +94,23 @@
                   </th>
                   <th
                     class="px-5 border-b-2 border-gray-200 bg-gray-100 text-sm font-semibold text-gray-900 tracking-wider">
-                    <div (click)="ordenarPorColumna('createdAt')"
+                    <div (click)="ordenarPorColumna('ordenServicio.createdAt')"
                       class="cursor-pointer w-max flex items-center justify-center focus:outline-none">
                       <span>
                         Fecha y hora
                       </span>
                       <span class="ml-2">
-                        <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 'asc'" width="15" height="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicio.createdAt' && ordenar.direccion == 'asc'" width="15" height="15"
                           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-chevron-down">
                           <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna == 'createdAt' && ordenar.direccion == 'desc'" width="15"
+                        <svg *ngIf="ordenar.columna == 'ordenServicio.createdAt' && ordenar.direccion == 'desc'" width="15"
                           height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-up">
                           <polyline points="18 15 12 9 6 15"></polyline>
                         </svg>
-                        <svg *ngIf="ordenar.columna != 'createdAt'" width="15" height="15" viewBox="0 0 24 24"
+                        <svg *ngIf="ordenar.columna != 'ordenServicio.createdAt'" width="15" height="15" viewBox="0 0 24 24"
                           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round" class="feather feather-minus">
                           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -199,7 +199,7 @@
                 </tr>
               </thead>
               <tbody>
-                @for(orden of ordenes | paginate: {itemsPerPage:cantidadItems, currentPage: paginaActual}; track orden.id){
+                @for(orden of ordenes | paginate: {itemsPerPage:cantidadItems, currentPage: paginaActual, totalItems:totalItems}; track orden.id){
                 <tr class="animate__animated animate__fadeIn">
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                     <p class="text-gray-900 whitespace-no-wrap">
