@@ -206,7 +206,6 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
       return;
     }
 
-
     this.alertService.loading();
 
     const data = {

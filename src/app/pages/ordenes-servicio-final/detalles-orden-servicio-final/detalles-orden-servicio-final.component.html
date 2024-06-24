@@ -88,8 +88,13 @@
         </button>
         <div>
           <h1 class="ml-2 text-xl"> Detalles de solicitud </h1>
-          <p class="px-2 py-1 mt-1 rounded w-max text-xs ml-2"
-            [ngClass]="{'bg-yellow-500':orden?.estadoOrden === 'Pendiente', 'bg-red-500':orden?.estadoOrden === 'Rechazada', 'bg-green-700':orden?.estadoOrden === 'Completada', 'bg-blue-700':orden?.estadoOrden === 'En proceso'}">
+          <p class="px-2 py-1 mt-1 rounded w-max text-xs ml-2" [ngClass]="{
+              'bg-slate-200 border border-gray-400 text-gray-900':orden.estadoOrden === 'Sin asignar',
+              'bg-blue-700 text-white':orden.estadoOrden === 'En proceso',
+              'bg-yellow-500 text-white':orden.estadoOrden === 'Pendiente', 
+              'bg-red-500 text-white':orden.estadoOrden === 'Sin solucion', 
+              'bg-green-700 text-white':orden.estadoOrden === 'Completada', 
+            }">
             {{ orden?.estadoOrden }} </p>
         </div>
       </div>
@@ -141,12 +146,14 @@
               fechaHora }} </span> </p>
         </div>
         <div *ngIf="orden?.estadoOrden !== 'Pendiente' && orden?.estadoOrden !== 'En proceso'">
-          <p [ngClass]="{'bg-red-100':orden?.estadoOrden === 'Rechazada', 'bg-green-100':orden?.estadoOrden === 'Completada'}" class="p-2 bg-gray-200"> <span class="font-semibold"> Fecha de cierre: </span> <span> {{ orden?.fechaCierre
+          <p [ngClass]="{'bg-red-100':orden?.estadoOrden === 'Rechazada', 'bg-green-100':orden?.estadoOrden === 'Completada'}"
+            class="p-2 bg-gray-200"> <span class="font-semibold"> Fecha de cierre: </span> <span> {{ orden?.fechaCierre
               |
               fechaHora }} </span> </p>
         </div>
         <div *ngIf="orden?.estadoOrden === 'Completada' || orden?.estadoOrden === 'Rechazada'" class="p-2">
-          <p class="py-1"> <span class="font-semibold"> Demora de solucion: </span> <span class="bg-gray-100 px-2 py-1 rounded border border-gray-400 ml-1"> {{ demoraSolucion }} </span> </p>
+          <p class="py-1"> <span class="font-semibold"> Demora de solucion: </span> <span
+              class="bg-gray-100 px-2 py-1 rounded border border-gray-400 ml-1"> {{ demoraSolucion }} </span> </p>
         </div>
         <div class="border-y">
           <p class="p-2"> <span class="font-semibold"> Solicitante: </span> <span> {{ orden?.usuario.apellido }} {{

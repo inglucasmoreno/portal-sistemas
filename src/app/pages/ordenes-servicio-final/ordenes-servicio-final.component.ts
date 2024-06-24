@@ -14,6 +14,7 @@ import { DataService } from '../../services/data.service';
 import { FechaHoraPipe } from '../../pipes/fecha-hora.pipe';
 import { AuthService } from '../../services/auth.service';
 import { LimitarStringPipe } from '../../pipes/limitar-string.pipe';
+import { ESTADO_ORDENES_SERVICIO } from '../../constants/ordenes-servicio-estado';
 
 @Component({
   standalone: true,
@@ -37,6 +38,7 @@ import { LimitarStringPipe } from '../../pipes/limitar-string.pipe';
 export default class OrdenesServicioFinalComponent implements OnInit {
 
   public ordenes: any = [];
+  public ESTADOS_ORDENES_SERVICIO = ESTADO_ORDENES_SERVICIO;
 
   // Dependencias
   public dependencias: any = [];
@@ -47,7 +49,7 @@ export default class OrdenesServicioFinalComponent implements OnInit {
   public filtro = {
     activo: 'true',
     parametro: '',
-    estado: 'Pendiente',
+    estado: 'Sin asignar',
   }
 
   // Ordenar
