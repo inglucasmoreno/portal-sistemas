@@ -47,12 +47,12 @@
   </div>
 </app-modal>
 
-<!-- Rechazo de solicitud -->
-<app-modal [showModal]="showRechazar">
+<!-- Solicitud sin solucion -->
+<app-modal [showModal]="showSinSolucion">
   <div>
     <div class="p-2 bg-gray-900 text-white flex items-center justify-between">
-      <h1> Rechanzando solicitud </h1>
-      <button (click)="showRechazar = false" class="hover:text-secondaryColor">
+      <h1> Solicitud sin solución </h1>
+      <button (click)="showSinSolucion = false" class="hover:text-secondaryColor">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -60,15 +60,43 @@
       </button>
     </div>
     <div class="p-2 bg-white text-sm">
-      <p class="font-semibold"> <span class="text-red-700"> * </span> Motivo de rechazo </p>
-      <input (keyup.enter)="rechazarSolicitud()" [(ngModel)]="motivoRechazo" type="text"
-        placeholder="Ej. No tenemos insumos" class="input-generico w-full mt-2">
+      <p class="font-semibold"> <span class="text-red-700"> * </span> Motivo </p>
+      <input (keyup.enter)="solicitudSinSolucion()" [(ngModel)]="motivoSinSolucion" type="text"
+        placeholder="Ej. Falta de insumos" class="input-generico w-full mt-2">
     </div>
     <div class="flex px-2 pb-2 mt-2 items-center w-full">
-      <button (click)="showRechazar = false" class="w-1/2 boton-eliminar">
+      <button (click)="showSinSolucion = false" class="w-1/2 boton-eliminar">
         Cancelar
       </button>
-      <button (click)="rechazarSolicitud()" class="w-1/2 ml-2 boton-crear">
+      <button (click)="solicitudSinSolucion()" class="w-1/2 ml-2 boton-crear">
+        Aceptar
+      </button>
+    </div>
+  </div>
+</app-modal>
+
+<!-- Solicitud solucionada -->
+<app-modal [showModal]="showSolucionado">
+  <div>
+    <div class="p-2 bg-gray-900 text-white flex items-center justify-between">
+      <h1> Solicitud solucionada </h1>
+      <button (click)="showSolucionado = false" class="hover:text-secondaryColor">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="p-2 bg-white text-sm">
+      <p class="font-semibold mt-1"> <span class="text-red-700"> * </span> Comentarios </p>
+      <input [(ngModel)]="comentarioSolucion" type="text" placeholder="Ej. Reinstalacion de drivers"
+        class="input-generico w-full mt-2">
+    </div>
+    <div class="flex px-2 pb-2 mt-2 items-center w-full">
+      <button (click)="showSolucionado = false" class="w-1/2 boton-eliminar">
+        Cancelar
+      </button>
+      <button class="w-1/2 ml-2 boton-crear">
         Aceptar
       </button>
     </div>
@@ -89,11 +117,11 @@
         <div>
           <h1 class="ml-2 text-xl"> Detalles de solicitud </h1>
           <p class="px-2 py-1 mt-1 rounded w-max text-xs ml-2" [ngClass]="{
-              'bg-slate-200 border border-gray-400 text-gray-900':orden.estadoOrden === 'Sin asignar',
-              'bg-blue-700 text-white':orden.estadoOrden === 'En proceso',
-              'bg-yellow-500 text-white':orden.estadoOrden === 'Pendiente', 
-              'bg-red-500 text-white':orden.estadoOrden === 'Sin solucion', 
-              'bg-green-700 text-white':orden.estadoOrden === 'Completada', 
+              'bg-indigo-500 text-white':orden?.estadoOrden === 'Sin asignar',
+              'bg-blue-500 text-white':orden?.estadoOrden === 'En proceso',
+              'bg-yellow-500 text-white':orden?.estadoOrden === 'Pendiente', 
+              'bg-red-500 text-white':orden?.estadoOrden === 'Sin solucion', 
+              'bg-green-700 text-white':orden?.estadoOrden === 'Completada', 
             }">
             {{ orden?.estadoOrden }} </p>
         </div>
@@ -129,7 +157,7 @@
         <div class="mt-4">
           <p *ngIf="orden?.estadoOrden === 'En proceso'" class="p-2"> <span class="font-semibold"> Tecnicos asignados:
             </span>
-            <span class="text-xs py-1 px-2 bg-blue-100 border border-blue-300 ml-2 rounded"
+            <span class="text-xs py-1 px-2 bg-blue-500 text-white border border-blue-500 ml-2 rounded"
               *ngFor="let tecnico of tecnicosAsignados"> {{ tecnico?.apellido }} {{ tecnico?.nombre }}
             </span>
           </p>
@@ -145,13 +173,13 @@
           <p class="p-2"> <span class="font-semibold"> Fecha en proceso: </span> <span> {{ orden?.fechaEnProceso |
               fechaHora }} </span> </p>
         </div>
-        <div *ngIf="orden?.estadoOrden !== 'Pendiente' && orden?.estadoOrden !== 'En proceso'">
-          <p [ngClass]="{'bg-red-100':orden?.estadoOrden === 'Rechazada', 'bg-green-100':orden?.estadoOrden === 'Completada'}"
+        <div *ngIf="orden?.estadoOrden !== 'Sin asignar' && orden?.estadoOrden !== 'En proceso'">
+          <p [ngClass]="{'bg-red-500 text-white rounded':orden?.estadoOrden === 'Sin solucion', 'bg-green-100':orden?.estadoOrden === 'Completada'}"
             class="p-2 bg-gray-200"> <span class="font-semibold"> Fecha de cierre: </span> <span> {{ orden?.fechaCierre
               |
               fechaHora }} </span> </p>
         </div>
-        <div *ngIf="orden?.estadoOrden === 'Completada' || orden?.estadoOrden === 'Rechazada'" class="p-2">
+        <div *ngIf="orden?.estadoOrden === 'Completada' || orden?.estadoOrden === 'Sin solucion'" class="p-2">
           <p class="py-1"> <span class="font-semibold"> Demora de solucion: </span> <span
               class="bg-gray-100 px-2 py-1 rounded border border-gray-400 ml-1"> {{ demoraSolucion }} </span> </p>
         </div>
@@ -173,23 +201,28 @@
           <p class="p-2"> <span class="font-semibold"> Detalles: </span> <span> {{ orden?.observacionSolicitud }}
             </span> </p>
         </div>
-        <div *ngIf="orden?.estadoOrden === 'Rechazada'" class="bg-red-100 border-y">
-          <p class="p-2"> <span class="font-semibold"> Motivo de rechazo: </span> <span> {{ orden?.motivoRechazo }}
+        <div *ngIf="orden?.estadoOrden === 'Sin solucion'" class="bg-red-500 rounded text-white border-y">
+          <p class="p-2"> <span class="font-semibold"> Motivo: </span> <span> {{ orden?.motivoSinSolucion }}
             </span> </p>
         </div>
       </div>
-      <div *ngIf="authService.usuario.role !== 'USER_ROLE'" class="flex items-center mt-2">
-        <button *ngIf="showSeccion === 'Detalles' && (orden?.estadoOrden === 'Pendiente' || orden?.estadoOrden === 'En proceso')
-        " (click)="abrirRechazar()" class="boton-eliminar w-1/2">
-          Rechazar
+      <div *ngIf="authService.usuario.role !== 'USER_ROLE' && showSeccion === 'Detalles'"
+        class="md:flex space-y-2 items-center md:mt-2">
+        <button *ngIf="orden?.estadoOrden === 'En proceso'" (click)="abrirNoSolucionado()"
+          class="boton-eliminar mt-2 w-full md:w-1/2">
+          Sin solución
         </button>
-        <button *ngIf="orden?.estadoOrden === 'Pendiente' && showSeccion === 'Detalles'" (click)="abrirAsignacion()"
-          class="boton-crear w-1/2 ml-2">
+        <button *ngIf="orden?.estadoOrden === 'En proceso'" (click)="abrirNoSolucionado()"
+          class="boton-pendiente md:ml-2 w-full md:w-1/2">
+          Pendiente
+        </button>
+        <button *ngIf="orden?.estadoOrden === 'Sin asignar' && showSeccion === 'Detalles'" (click)="abrirAsignacion()"
+          class="boton-crear w-full md:ml-2">
           Continuar
         </button>
-        <button (click)="completarSolicitud()" *ngIf="orden?.estadoOrden === 'En proceso' && showSeccion === 'Detalles'"
-          class="boton-crear w-1/2 ml-2">
-          Completar
+        <button (click)="abrirSolucionado()" *ngIf="orden?.estadoOrden === 'En proceso'"
+          class="boton-crear w-full md:w-1/2 md:ml-2">
+          Solucionado
         </button>
       </div>
     </div>
@@ -200,7 +233,7 @@
         <div class="border mb-4 rounded text-sm border-gray-400" *ngFor="let elemento of historialOrden">
 
           <!-- Solicitud generada -->
-          <div *ngIf="elemento.tipo === 'Generada'" class="border-l-8 border-yellow-400 rounded-l p-2">
+          <div *ngIf="elemento.tipo === 'Generada'" class="border-l-8 border-indigo-500 rounded-l p-2">
             <div class="flex items-center justify-between">
               <p class="font-semibold"> Solicitud generada </p>
               <p> {{ elemento.createdAt | fechaHora }} </p>
@@ -210,7 +243,7 @@
           </div>
 
           <!-- Solicitud en proceso -->
-          <div *ngIf="elemento.tipo === 'En proceso'" class="border-l-8 border-blue-400 rounded-l p-2">
+          <div *ngIf="elemento.tipo === 'En proceso'" class="border-l-8 border-blue-500 rounded-l p-2">
             <div class="flex items-center justify-between">
               <p class="font-semibold"> En proceso </p>
               <p> {{ elemento.createdAt | fechaHora }} </p>
@@ -218,7 +251,7 @@
             <p class="mt-2"> <span class="font-semibold"> Usuario: </span> {{ elemento.creatorUser.apellido }} {{
               elemento.creatorUser.nombre }} </p>
             <p class="mt-4 mb-2">
-              <span class="bg-blue-100 rounded mr-2 border text-xs border-blue-300 p-2"
+              <span class="bg-blue-500 text-white rounded mr-2 border text-xs border-blue-500 p-2"
                 *ngFor="let item of elemento.OrdenesServicioHistorialToTecnicos">
                 {{ item.tecnico.apellido }} {{ item.tecnico.nombre }}
               </span>
@@ -226,15 +259,15 @@
           </div>
 
           <!-- Solicitud rechaza -->
-          <div *ngIf="elemento.tipo === 'Rechazada'" class="border-l-8 border-red-400 rounded-l p-2">
+          <div *ngIf="elemento.tipo === 'Sin solucion'" class="border-l-8 border-red-500 rounded-l p-2">
             <div class="flex items-center justify-between">
-              <p class="font-semibold"> Solicitud rechazada </p>
+              <p class="font-semibold"> Solicitud sin solucion </p>
               <p> {{ elemento.createdAt | fechaHora }} </p>
             </div>
             <p class="mt-2"> <span class="font-semibold"> Usuario: </span> {{ elemento.creatorUser.apellido }} {{
               elemento.creatorUser.nombre }} </p>
-            <p class="mt-2 bg-red-100 p-2"> <span class="font-semibold"> Motivo: </span> {{
-              elemento.motivoRechazo }} </p>
+            <p class="mt-2 bg-red-500 rounded text-white p-2"> <span class="font-semibold"> Motivo: </span> {{
+              elemento.motivoSinSolucion }} </p>
           </div>
 
           <!-- Solicitud reactivada -->

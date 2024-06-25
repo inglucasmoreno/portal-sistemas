@@ -211,7 +211,7 @@
                 @for(orden of ordenes | paginate: {itemsPerPage:
                 cantidadItems, currentPage: paginaActual, totalItems:totalItems}; track orden.id){
                 <tr 
-                  class="animate__animated hover:bg-gray-50 cursor-pointer animate__fadeIn">
+                  class="animate__animated hover:bg-gray-50 animate__fadeIn">
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                     <p class="text-gray-900 whitespace-no-wrap">
                       {{ orden.id }}
@@ -234,13 +234,13 @@
                   </td>
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
                     <p [ngClass]="{
-                      'bg-slate-200 border border-gray-400 text-gray-900':orden.estadoOrden === 'Sin asignar',
-                      'bg-blue-700 text-white':orden.estadoOrden === 'En proceso',
-                        'bg-yellow-500 text-white':orden.estadoOrden === 'Pendiente', 
-                        'bg-red-500 text-white':orden.estadoOrden === 'Sin solucion', 
-                        'bg-green-700 text-white':orden.estadoOrden === 'Completada', 
+                      'bg-indigo-500':orden.estadoOrden === 'Sin asignar',
+                      'bg-blue-500':orden.estadoOrden === 'En proceso',
+                        'bg-yellow-500':orden.estadoOrden === 'Pendiente', 
+                        'bg-red-500':orden.estadoOrden === 'Sin solucion', 
+                        'bg-green-700':orden.estadoOrden === 'Completada', 
                       }" 
-                      class="w-max whitespace-no-wrap p-1 rounded">
+                      class="w-max whitespace-no-wrap p-1 text-white rounded">
                       {{ orden.estadoOrden }}
                     </p>
                   </td>

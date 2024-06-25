@@ -47,9 +47,13 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
   public tecnicosAsignados: any[] = [];
   public tecnicosParaAsignar: any[] = [];
 
-  // Rechazo de solicitud
-  public showRechazar: boolean = false;
-  public motivoRechazo: string = '';
+  // Solicitud solucionada
+  public showSinSolucion: boolean = false;
+  public motivoSinSolucion: string = '';
+
+  // Solicitud sin solucion
+  public showSolucionado: boolean = false;
+  public comentarioSolucion: string = '';
 
   // Historial
   public historialOrden: any[] = [];
@@ -108,39 +112,43 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
     })
   }
 
-  abrirRechazar(): void {
-    // El motivo de rechazo se limpia cada vez que se abre el modal
-    this.motivoRechazo = '';
-    this.showRechazar = true;
+  abrirNoSolucionado(): void {
+    this.motivoSinSolucion = '';
+    this.showSinSolucion = true;
   }
 
-  rechazarSolicitud(): void {
+  abrirSolucionado(): void {
+    this.comentarioSolucion = '';
+    this.showSolucionado = true;
+  }
+
+  solicitudSinSolucion(): void {
 
     // Se verifica que el motivo de rechazo no esté vacío
-    if (!this.motivoRechazo.trim()) {
-      this.alertService.info('El motivo de rechazo no puede estar vacío');
+    if (!this.motivoSinSolucion.trim()) {
+      this.alertService.info('El motivo no puede estar vacío');
       return;
     }
 
-    this.alertService.question({ msg: '¿Quieres rechazar la solicitud?', buttonText: 'Aceptar' })
+    this.alertService.question({ msg: '¿Solicitud sin solución?', buttonText: 'Aceptar' })
       .then(({ isConfirmed }) => {
         if (isConfirmed) {
 
           this.alertService.loading();
 
-          const dataRechazo = {
+          const dataSinSolucion = {
             fechaCierre: new Date().toISOString(),
-            estadoOrden: 'Rechazada',
-            motivoRechazo: this.motivoRechazo,
+            estadoOrden: 'Sin solucion',
+            motivoSinSolucion: this.motivoSinSolucion,
             activo: false
           }
 
           // Rechazo de solicitud
-          this.ordenesServicio.actualizarOrden(this.idSolicitud, dataRechazo).subscribe({
+          this.ordenesServicio.actualizarOrden(this.idSolicitud, dataSinSolucion).subscribe({
             next: () => {
               const dataHistorial = {
-                tipo: 'Rechazada',
-                motivoRechazo: this.motivoRechazo,
+                tipo: 'Sin solucion',
+                motivoSinSolucion: this.motivoSinSolucion,
                 ordenServicioId: this.orden.id,
                 creatorUserId: this.authService.usuario.userId,
               }
@@ -169,7 +177,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
 
           const dataHistorial = {
             tipo: 'Reactivada',
-            motivoRechazo: '',
+            motivoSinSolucion: '',
             ordenServicioId: this.orden.id,
             creatorUserId: this.authService.usuario.userId,
             activo: true
@@ -182,7 +190,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
               const dataReactivar = {
                 fechaCierre: new Date().toISOString(),
                 estadoOrden: 'Pendiente',
-                motivoRechazo: '',
+                motivoSinSolucion: '',
                 activo: true
               }
 
@@ -288,14 +296,14 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
           this.alertService.loading();
           const data = {
             fechaCierre: new Date().toISOString(),
-            estadoOrden: 'Completada',
+            estadoOrden: 'Solucionado',
             activo: false
           };
           this.ordenesServicio.actualizarOrden(this.idSolicitud, data).subscribe({
             next: () => {
 
               const dataHistorial = {
-                tipo: 'Completada',
+                tipo: 'Solucionado',
                 ordenServicioId: this.orden.id,
                 creatorUserId: this.authService.usuario.userId,
               }
