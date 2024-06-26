@@ -104,6 +104,12 @@
                 <thead>
                   <tr class="border">
                     <th
+                    class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
+                    <div class="flex items-center focus:outline-none">
+                      <span> Imagen </span>
+                    </div>
+                  </th>
+                    <th
                       class="px-5 py-2 border-b-2 border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-900 tracking-wider">
                       <div (click)="ordenarPorColumna('nombre')"
                         class="cursor-pointer flex items-center focus:outline-none">
@@ -188,7 +194,10 @@
                 <tbody>
                   @for(dependencia of dependencias | filtroDependencias:filtro.parametro:filtro.activo | paginate: {itemsPerPage:
                   cantidadItems, currentPage: paginaActual}; track dependencia.id){
-                  <tr class="animate__animated animate__fadeIn">
+                  <tr class="animate__animated animate__fadeIn hover:bg-gray-50">
+                    <td class="px-5 py-2 border-b border-gray-200 text-xs">
+                      <img class="w-10" src="assets/svg/dependencia.svg" alt="">
+                    </td>
                     <td class="px-5 py-2 border-b border-gray-200 text-xs">
                       <p class="text-gray-900 w-max whitespace-no-wrap">
                         {{ dependencia.nombre }}

@@ -217,7 +217,7 @@
             </thead>
             <tbody>
               <tr [ngClass]="{'bg-indigo-50':authService.usuario.userId === usuario.id}"
-                class="animate__animated animate__fadeIn"
+                class="animate__animated animate__fadeIn hover:bg-gray-50"
                 *ngFor="let usuario of usuarios | filtroUsuarios:filtro.parametro:filtro.activo | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual}">
                 <td class="px-5 py-2 border-b border-gray-200 text-xs">
                   <div class="text-gray-900 whitespace-no-wrap">

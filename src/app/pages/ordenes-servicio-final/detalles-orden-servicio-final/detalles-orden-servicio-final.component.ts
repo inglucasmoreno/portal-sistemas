@@ -196,7 +196,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
             fechaPendiente:  new Date().toISOString(),
             estadoOrden: 'Pendiente',
             motivoPendiente: this.motivoPendiente,
-            activo: false
+            activo: true
           }
 
           // Solicitud pendiente
@@ -245,7 +245,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
 
               const dataReactivar = {
                 fechaCierre: new Date().toISOString(),
-                estadoOrden: 'Pendiente',
+                estadoOrden: 'Sin asignar',
                 motivoSinSolucion: '',
                 activo: true
               }

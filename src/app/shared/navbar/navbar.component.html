@@ -162,7 +162,7 @@
     @if(showSeccion.reportes){
     <div class="p-1 bg-gray-500 rounded">
       <!-- Solicitudes de asistencia -->
-      <li *ngIf="authService.usuario.role === 'ADMIN_ROLE'" routerLinkActive="bg-secondaryColor rounded" routerLink="reportes/solicitudes-asistencia"
+      <li *ngIf="authService.usuario.role === 'ADMIN_ROLE'" routerLinkActive="bg-secondaryColor text-[17px] rounded" routerLink="reportes/solicitudes-asistencia"
         class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
         <a class="ml-2 mt-1"> Solicitudes de asistencias </a>
       </li>

@@ -147,22 +147,22 @@
           <p class="px-2 py-1 mt-1 rounded w-max text-xs ml-2" [ngClass]="{
               'bg-indigo-500 text-white':orden?.estadoOrden === 'Sin asignar',
               'bg-blue-500 text-white':orden?.estadoOrden === 'En proceso',
-              'bg-orange-500 text-white':orden?.estadoOrden === 'Pendiente', 
-              'bg-red-500 text-white':orden?.estadoOrden === 'Sin solucion', 
-              'bg-emerald-500 text-white':orden?.estadoOrden === 'Completada', 
+              'bg-orange-500 text-white':orden?.estadoOrden === 'Pendiente',
+              'bg-red-500 text-white':orden?.estadoOrden === 'Sin solucion',
+              'bg-emerald-500 text-white':orden?.estadoOrden === 'Completada',
             }">
             {{ orden?.estadoOrden }} </p>
         </div>
       </div>
       <div class="mr-2">
-        <!-- <button *ngIf="orden?.estadoOrden === 'Rechazada' && authService.usuario.role !== 'USER_ROLE'" (click)="reactivarSolicitud()" title="Reactivar solicitud"
+        <button *ngIf="orden?.estadoOrden === 'Sin solucion' && authService.usuario.role !== 'USER_ROLE'" (click)="reactivarSolicitud()" title="Reactivar solicitud"
           class="p-2 bg-white text-gray-900 rounded hover:text-secondaryColor">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
           </svg>
-        </button> -->
+        </button>
       </div>
     </div>
   </div>
@@ -197,10 +197,10 @@
           <p class="p-2"> <span class="font-semibold"> Fecha de solicitud: </span> <span> {{ orden?.createdAt |
               fechaHora }} </span> </p>
         </div>
-        <div *ngIf="orden?.estadoOrden !== 'Pendiente'" class="border-t">
+        <!-- <div *ngIf="orden?.estadoOrden !== 'Pendiente'" class="border-t">
           <p class="p-2"> <span class="font-semibold"> Fecha en proceso: </span> <span> {{ orden?.fechaEnProceso |
               fechaHora }} </span> </p>
-        </div>
+        </div> -->
         <div *ngIf="orden?.estadoOrden === 'Pendiente'" class="border-t">
           <p class="p-2 bg-orange-100 border border-orange-400 rounded"> <span class="font-semibold"> Pendiente desde:
             </span> <span> {{ orden?.fechaPendiente |
@@ -208,7 +208,7 @@
         </div>
         <div *ngIf="orden?.estadoOrden === 'Completada' || orden?.estadoOrden === 'Sin solucion'">
           <p [ngClass]="{'bg-red-100 border-red-300':orden?.estadoOrden === 'Sin solucion', 'bg-emerald-100 border-emerald-300':orden?.estadoOrden === 'Completada'}"
-            class="p-2 text-black border rounded bg-gray-200"> <span class="font-semibold"> Fecha de cierre: </span>
+            class="p-2 text-black border rounded"> <span class="font-semibold"> Fecha de cierre: </span>
             <span> {{
               orden?.fechaCierre
               |
@@ -275,7 +275,7 @@
 
     <!-- Seccion: Historial -->
     <div *ngIf="showSeccion === 'Historial'">
-      <div class="p-2 max-h-72 overflow-y-auto">
+      <div class="p-2 max-h-96 overflow-y-auto">
         <div class="border mb-4 rounded text-sm border-gray-400" *ngFor="let elemento of historialOrden">
 
           <!-- Solicitud generada -->
