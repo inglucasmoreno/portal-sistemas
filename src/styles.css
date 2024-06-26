@@ -16,7 +16,7 @@
 }
 
 .boton-pendiente {
-  @apply p-2 bg-yellow-600 hover:opacity-90 text-white rounded shadow
+  @apply p-2 bg-orange-500 hover:opacity-90 text-white rounded shadow
 }
 
 .boton-editar {

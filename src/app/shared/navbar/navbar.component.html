@@ -33,7 +33,7 @@
   <ul class="mt-5 text-sm">
 
     <!-- Home -->
-    <li routerLinkActive="bg-secondaryColor rounded" routerLink="home"
+    <li routerLinkActive="bg-secondaryColor text-[17px] rounded" routerLink="home"
       class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,8 +42,8 @@
       <a class="ml-2 mt-1"> Inicio </a>
     </li>
 
-    <!-- Nueva orden de servicio -->
-    <li *ngIf="authService.usuario.role !== 'USER_ROLE'" routerLinkActive="bg-secondaryColor rounded"
+    <!-- Mi Bandeja -->
+    <li *ngIf="authService.usuario.role !== 'USER_ROLE'" routerLinkActive="bg-secondaryColor text-[17px] rounded"
       routerLink="/dashboard/miBandeja"
       class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -54,8 +54,8 @@
       <a class="ml-2 mt-1"> Mi bandeja </a>
     </li>
 
-    <!-- Nueva orden de servicio -->
-    <li routerLinkActive="bg-secondaryColor rounded" routerLink="ordenServicio/nueva"
+    <!-- Solicitar asistencia -->
+    <li routerLinkActive="bg-secondaryColor text-[17px] rounded" routerLink="ordenServicio/nueva"
       class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
         class="w-5 h-5">
@@ -65,8 +65,8 @@
       <a class="ml-2 mt-1"> Solicitar asistencia </a>
     </li>
 
-    <!-- Ordenes de servicio -->
-    <li routerLinkActive="bg-secondaryColor rounded" routerLink="ordenesServicio"
+    <!-- Listado de solicitudes -->
+    <li routerLinkActive="bg-secondaryColor text-[17px] rounded" routerLink="ordenesServicio"
       class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
         class="w-5 h-5">
@@ -110,20 +110,20 @@
     <div class="p-1 bg-gray-500 rounded">
 
       <!-- Usuarios -->
-      <li routerLinkActive="bg-secondaryColor rounded" routerLink="usuarios"
+      <li routerLinkActive="bg-secondaryColor text-[17px] rounded" routerLink="usuarios"
         class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
         <a class="ml-2 mt-1"> Usuarios </a>
       </li>
 
       <!-- Dependencias -->
-      <li routerLinkActive="bg-secondaryColor rounded" routerLink="dependencias"
+      <li routerLinkActive="bg-secondaryColor text-[17px] rounded" routerLink="dependencias"
         class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
         <a class="ml-2 mt-1"> Dependencias </a>
       </li>
 
 
       <!-- Tipos de ordenes -->
-      <li routerLinkActive="bg-secondaryColor rounded" routerLink="tiposOrdenServicio"
+      <li routerLinkActive="bg-secondaryColor text-[17px] rounded" routerLink="tiposOrdenServicio"
         class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
         <a class="ml-2 mt-1"> Tipos de ordenes </a>
       </li>

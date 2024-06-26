@@ -206,44 +206,49 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
       return;
     }
 
-    this.alertService.loading();
+    this.alertService.question({ msg: 'Generando solicitud', buttonText: 'Aceptar' })
+    .then(({ isConfirmed }) => {
+      if (isConfirmed) {
+        this.alertService.loading();
 
-    const data = {
-      usuarioId: this.authService.usuario.role === 'USER_ROLE' ? this.authService.usuario.userId : this.usuarioSeleccionado.id,
-      tipoOrdenServicioId: Number(tipoOrdenServicioId),
-      telefonoContacto,
-      dependenciaId: Number(this.dependenciaSeleccionada),
-      creatorUserId,
-      observacionSolicitud
-    };
-
-    this.ordenesServicio.nuevaOrden(data).subscribe({
-      next: ({ orden }) => {
-
-        const dataHistorial = {
-          ordenServicioId: orden.id,
-          tipo: 'Generada',
-          creatorUserId: this.authService.usuario.userId
-        }
-
-        this.ordenesServicioHistorial.nuevaRelacion(dataHistorial).subscribe({
-          next: () => {
-            this.usuarioSeleccionado = null;
-            this.solicitudEnviada = true;
-            this.solicitudForm = {
-              usuarioId: '',
-              telefonoContacto: this.authService.usuario.telefono,
-              tipoOrdenServicioId: '',
-              creatorUserId: this.authService.usuario.userId,
-              observacionSolicitud: ''
+        const data = {
+          usuarioId: this.authService.usuario.role === 'USER_ROLE' ? this.authService.usuario.userId : this.usuarioSeleccionado.id,
+          tipoOrdenServicioId: Number(tipoOrdenServicioId),
+          telefonoContacto,
+          dependenciaId: Number(this.dependenciaSeleccionada),
+          creatorUserId,
+          observacionSolicitud
+        };
+    
+        this.ordenesServicio.nuevaOrden(data).subscribe({
+          next: ({ orden }) => {
+    
+            const dataHistorial = {
+              ordenServicioId: orden.id,
+              tipo: 'Generada',
+              creatorUserId: this.authService.usuario.userId
             }
-            this.alertService.close();
-          }, error: ({ error }) => this.alertService.errorApi(error.message)
-        })
-
-      }, error: ({error}) => this.alertService.errorApi(error.message)
+    
+            this.ordenesServicioHistorial.nuevaRelacion(dataHistorial).subscribe({
+              next: () => {
+                this.usuarioSeleccionado = null;
+                this.solicitudEnviada = true;
+                this.solicitudForm = {
+                  usuarioId: '',
+                  telefonoContacto: this.authService.usuario.telefono,
+                  tipoOrdenServicioId: '',
+                  creatorUserId: this.authService.usuario.userId,
+                  observacionSolicitud: ''
+                }
+                this.alertService.close();
+              }, error: ({ error }) => this.alertService.errorApi(error.message)
+            })
+    
+          }, error: ({error}) => this.alertService.errorApi(error.message)
+        });
+    
+      }
     });
-
   }
 
   regresarFormulario(): void {

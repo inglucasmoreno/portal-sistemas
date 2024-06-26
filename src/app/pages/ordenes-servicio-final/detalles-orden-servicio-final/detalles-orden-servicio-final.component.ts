@@ -53,7 +53,11 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
 
   // Solicitud sin solucion
   public showSolucionado: boolean = false;
-  public comentarioSolucion: string = '';
+  public comentariosSolucion: string = '';
+
+  // Solicitud pendiente
+  public showPendiente: boolean = false;
+  public motivoPendiente: string = '';
 
   // Historial
   public historialOrden: any[] = [];
@@ -99,6 +103,7 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
     this.alertService.loading()
     this.ordenesServicio.getOrden(this.idSolicitud).subscribe({
       next: ({ orden }) => {
+        console.log(orden);
         this.orden = orden;
         this.historialOrden = this.orden.ordenesServicioHistorial;
         this.calculoDemoraSolucion();
@@ -118,13 +123,18 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
   }
 
   abrirSolucionado(): void {
-    this.comentarioSolucion = '';
+    this.comentariosSolucion = '';
     this.showSolucionado = true;
+  }
+
+  abrirPendiente(): void {
+    this.motivoPendiente = '';
+    this.showPendiente = true;
   }
 
   solicitudSinSolucion(): void {
 
-    // Se verifica que el motivo de rechazo no esté vacío
+    // Se verifica que el motivo no esté vacío
     if (!this.motivoSinSolucion.trim()) {
       this.alertService.info('El motivo no puede estar vacío');
       return;
@@ -149,6 +159,52 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
               const dataHistorial = {
                 tipo: 'Sin solucion',
                 motivoSinSolucion: this.motivoSinSolucion,
+                ordenServicioId: this.orden.id,
+                creatorUserId: this.authService.usuario.userId,
+              }
+              // Actualizacion de historial
+              this.ordenesServicioHistorialService.nuevaRelacion(dataHistorial).subscribe({
+                next: () => {
+                  this.alertService.close();
+                  // this.router.navigateByUrl('/dashboard/ordenesServicio');
+                  this.regresarRutaAnterior();
+                }, error: ({ error }) => this.alertService.errorApi(error.message)
+              });
+            }, error: ({ error }) => this.alertService.errorApi(error.message)
+          });
+
+        }
+      });
+
+  }
+
+  solicitudPendiente(): void {
+
+    // Se verifica que el motivo no esté vacío
+    if (!this.motivoPendiente.trim()) {
+      this.alertService.info('El motivo no puede estar vacío');
+      return;
+    }
+
+    this.alertService.question({ msg: '¿Solicitud pendiente?', buttonText: 'Aceptar' })
+      .then(({ isConfirmed }) => {
+        if (isConfirmed) {
+
+          this.alertService.loading();
+
+          const dataPendiente = {
+            fechaPendiente:  new Date().toISOString(),
+            estadoOrden: 'Pendiente',
+            motivoPendiente: this.motivoPendiente,
+            activo: false
+          }
+
+          // Solicitud pendiente
+          this.ordenesServicio.actualizarOrden(this.idSolicitud, dataPendiente).subscribe({
+            next: () => {
+              const dataHistorial = {
+                tipo: 'Pendiente',
+                motivoPendiente: this.motivoPendiente,
                 ordenServicioId: this.orden.id,
                 creatorUserId: this.authService.usuario.userId,
               }
@@ -290,21 +346,29 @@ export default class DetallesOrdenServicioFinalComponent implements OnInit {
   }
 
   completarSolicitud(): void {
+
+    if (!this.comentariosSolucion.trim()) {
+      this.alertService.info('Debe describir la solución');
+      return;
+    }
+
     this.alertService.question({ msg: '¿Quieres completar la solicitud?', buttonText: 'Aceptar' })
       .then(({ isConfirmed }) => {
         if (isConfirmed) {
           this.alertService.loading();
           const data = {
             fechaCierre: new Date().toISOString(),
-            estadoOrden: 'Solucionado',
+            comentariosSolucion: this.comentariosSolucion,
+            estadoOrden: 'Completada',
             activo: false
           };
           this.ordenesServicio.actualizarOrden(this.idSolicitud, data).subscribe({
             next: () => {
 
               const dataHistorial = {
-                tipo: 'Solucionado',
+                tipo: 'Completada',
                 ordenServicioId: this.orden.id,
+                comentariosSolucion: this.comentariosSolucion,
                 creatorUserId: this.authService.usuario.userId,
               }
 

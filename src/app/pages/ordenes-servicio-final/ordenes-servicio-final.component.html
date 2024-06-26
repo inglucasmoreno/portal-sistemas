@@ -236,9 +236,9 @@
                     <p [ngClass]="{
                       'bg-indigo-500':orden.estadoOrden === 'Sin asignar',
                       'bg-blue-500':orden.estadoOrden === 'En proceso',
-                        'bg-yellow-500':orden.estadoOrden === 'Pendiente', 
+                        'bg-orange-500':orden.estadoOrden === 'Pendiente', 
                         'bg-red-500':orden.estadoOrden === 'Sin solucion', 
-                        'bg-green-700':orden.estadoOrden === 'Completada', 
+                        'bg-emerald-500':orden.estadoOrden === 'Completada', 
                       }" 
                       class="w-max whitespace-no-wrap p-1 text-white rounded">
                       {{ orden.estadoOrden }}
