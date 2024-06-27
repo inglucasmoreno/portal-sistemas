@@ -222,7 +222,7 @@
                     </p>
                   </td>
                   <td class="px-5 py-2 border-b border-gray-200 text-xs">
-                    <p [ngClass]="{'bg-yellow-500':orden.estadoOrden === 'Pendiente', 'bg-red-500':orden.estadoOrden === 'Rechazada', 'bg-green-700':orden.estadoOrden === 'Completada', 'bg-blue-700':orden.estadoOrden === 'En proceso'}"
+                    <p [ngClass]="{'bg-yellow-500':orden.estadoOrden === 'Pendiente', 'bg-red-500':orden.estadoOrden === 'Rechazada', 'bg-green-700':orden.estadoOrden === 'Completada', 'bg-blue-500':orden.estadoOrden === 'En proceso'}"
                       class="text-white w-max whitespace-no-wrap p-1 rounded">
                       {{ orden.estadoOrden }}
                     </p>

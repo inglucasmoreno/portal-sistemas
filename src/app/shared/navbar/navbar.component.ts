@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { DataService } from '../../services/data.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   standalone: true,
@@ -25,7 +26,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    public dataService: DataService
+    public dataService: DataService,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +40,12 @@ export class NavbarComponent implements OnInit {
   }
 
   // Metodo: Cerrar sesion
-  logout(): void { this.authService.logout(); }
+  logout(): void { 
+    // question 
+    this.alertService.question({ msg: 'Cerrando sesión', buttonText: 'Aceptar' })
+    .then(({ isConfirmed }) => {
+      if (isConfirmed) this.authService.logout(); 
+    });
+  }
 
 }
