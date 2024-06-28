@@ -71,7 +71,7 @@ export default class NuevaOrdenServicioFinalComponent implements OnInit, AfterVi
 
   ngOnInit() {
     gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
-    this.dataService.ubicacionActual = "Dashboard - Nueva solicitud";
+    this.dataService.ubicacionActual = "Portal - Nueva solicitud";
 
     this.alertService.loading();
 

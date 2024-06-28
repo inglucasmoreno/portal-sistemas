@@ -49,7 +49,7 @@ export default class OrdenesServicioFinalComponent implements OnInit {
   public filtro = {
     activo: 'true',
     parametro: '',
-    estado: 'Sin asignar',
+    estado: this.authService.usuario.role === 'ADMIN_ROLE' ? 'Sin asignar' : '',
   }
 
   // Ordenar
@@ -71,7 +71,7 @@ export default class OrdenesServicioFinalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.dataService.ubicacionActual = 'Dashboard - Listado de solicitudes';
+    this.dataService.ubicacionActual = 'Portal - Listado de solicitudes';
     this.dependencias = this.authService.usuario.dependencias;
     this.dependenciaSeleccionada = this.dependencias[0].idDependencia;
     this.nombreDependenciaSeleccionada();

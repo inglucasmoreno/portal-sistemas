@@ -68,7 +68,7 @@ export default class DependenciasComponent {
   ) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = 'Dashboard - Dependencias';
+    this.dataService.ubicacionActual = 'Portal - Dependencias';
     this.alertService.loading();
     this.listarDependencias();
   }

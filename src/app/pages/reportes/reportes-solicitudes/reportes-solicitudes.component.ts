@@ -15,7 +15,7 @@ export default class ReportesSolicitudesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.dataService.ubicacionActual = 'Dashboard - Reportes - Solicitudes';
+    this.dataService.ubicacionActual = 'Portal - Reportes - Solicitudes';
     gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
   }
 

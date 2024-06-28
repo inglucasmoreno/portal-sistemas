@@ -47,7 +47,7 @@ export default class PerfilComponent implements OnInit {
   ngOnInit(): void {
 
     gsap.from('.gsap-contenido', { y: 100, opacity: 0, duration: .2 });
-    this.dataService.ubicacionActual = "Dashboard - Perfil";
+    this.dataService.ubicacionActual = "Portal - Perfil";
     this.getUsuario();
 
     // Formulario reactivo para password

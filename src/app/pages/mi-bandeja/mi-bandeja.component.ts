@@ -67,7 +67,7 @@ export default class MiBandejaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.dataService.ubicacionActual = 'Dashboard - Listado de solicitudes';
+    this.dataService.ubicacionActual = 'Portal - Listado de solicitudes';
     this.listarOrdenes();
   }
 

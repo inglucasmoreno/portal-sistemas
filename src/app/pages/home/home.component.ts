@@ -13,12 +13,10 @@ export default class HomeComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private authService: AuthService
   ) { }
 
   ngOnInit() {
-    console.log(this.authService.usuario);
-    this.dataService.ubicacionActual = 'Dashboard - Inicio';
+    this.dataService.ubicacionActual = 'Portal - Inicio';
     gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
   }
 

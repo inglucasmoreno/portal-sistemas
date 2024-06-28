@@ -55,7 +55,7 @@ export default class TiposOrdenServicioComponent {
   ) { }
 
   ngOnInit(): void {
-    this.dataService.ubicacionActual = 'Dashboard - Tipos de orden';
+    this.dataService.ubicacionActual = 'Portal - Tipos de orden';
     this.alertService.loading();
     this.listarTipos();
   }
