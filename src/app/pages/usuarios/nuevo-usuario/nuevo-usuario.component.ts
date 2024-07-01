@@ -85,7 +85,7 @@ export default class NuevoUsuarioComponent implements OnInit {
 
     // Animaciones y Datos de ruta
     gsap.from('.gsap-contenido', { y: 100, opacity: 0, duration: .2 });
-    this.dataService.ubicacionActual = 'Dashboard - Creando usuario';
+    this.dataService.ubicacionActual = 'Portal - Creando usuario';
 
     // Formulario reactivo
     this.usuarioForm = this.fb.group({
