@@ -28,7 +28,7 @@ export class LoaderComponent implements OnInit {
         }else if(event instanceof NavigationEnd) { // Fin de navegacion
           window.scrollTo(0, 0);
           this.show = false;
-          this.dataService.showMenu = false;
+          this.dataService.showMenu = false
         }
       }
     })
