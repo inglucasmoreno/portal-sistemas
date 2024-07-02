@@ -39,7 +39,12 @@ export default class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
+    // gsap.from('.gsap-contenido', { y:100, opacity: 0, duration: .2 });
+    var tl = gsap.timeline({ defaults: { duration: 0.1 } });
+    tl.from('.gsap-formulario', { y:-100, opacity: 0, duration: .5 })
+      .from('.gsap-fondo', { y:100, opacity: 0, duration: .5 })
+      .from('.gsap-imagen', { y:100, opacity: 0, duration: .5 });
+  
   }
 
   login(): void {
